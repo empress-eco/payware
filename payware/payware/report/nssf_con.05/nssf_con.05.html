@@ -1,0 +1,72 @@
+<style>
+.print-format {
+        padding-left: 10mm;
+        padding-right: 5mm;
+        padding-top: 10mm;
+}
+</style>
+
+<h6 class="text-right">Form: NSSF CON.05</h6>
+<h4 class="text-center">
+	THE UNITED REPUBLIC OF TANZANIA<br>
+	NATIONAL SOCIAL SECURITY FUND<br>
+	MEMBER'S CONTRIBUTION RECORD<br>
+</h4>
+
+<table class="table">
+	<tbody>
+		<tr>
+			<td width="50%"> 
+				<strong>Employer Name :</strong> {%= data[0][ __("Company")] %}<br>
+				<strong>Address :</strong> {%= data[0][ __("Company Address")] %}<br>
+				<strong>Employer&apos;s Registration Number :</strong> 99999<br>
+				<strong>Month of Contribution :</strong> January<br>
+				<strong>Regional/District Office :</strong> Ilala<br>
+			</td>
+			<td width="50%"> 
+				<strong>Chq/Mo/Po No.:</strong><br>
+				<strong>Date of Chq/Mo/Po:</strong><br>
+				<strong>Bank/Post Office Branch :</strong><br>
+				<strong>Year :</strong> 2018<br>
+			</td>
+		</tr>
+	</tbody>
+</table>
+CONTRIBUTION FOR PERMENANT EMPLOYEES (MANDATORY)
+<table class="table table-bordered">
+        <thead>
+                <tr>
+                        <th style="width: 4%; text-align: center">{%= __("") %}</th>
+                        <th>{%= __("Emp ID") %}</th>
+                        <th style="width: 35%; text-align: center">{%= __("Insured Person's Name") %}</th>
+                        <th>{%= __("Total Gross") %}</th>
+                        <th>{%= __("Membership No") %}</th>
+                        <th>{%= __("Contributions Tshs (20%)") %}</th>
+                        <th>{%= __("Remarks") %}</th>
+                </tr>
+        </thead>
+        <tbody>
+        {% for(var i=0, l=data.length; i<l; i++) { %}
+                <tr>
+                        <td>{%= i+1 %}</td>
+                        <td>{%= data[i][ __("Emp ID")] %}</td>
+                        <td>{%= data[i][ __("Employee Name")] %}</td>
+                        <td align="right">{%= data[i][ __("Gross Pay")] %} </td>
+                        <td>{%= data[i][ __("Membership No")] %} </td>
+                        <td align="right">{%= data[i][ __("Contribution")] %} </td>
+						<td>&nbsp;</td>
+                </tr>
+                {% } %}
+
+        </tbody>
+</table>
+<div class="page-break"></div> 
+This is a remark 
+<p class="text-left">
+<br><br><br>
+Employer's Signature: ___________________________________<br>
+<strong>NOTE:</strong><br>
+*To be used for NSSF registered numbers and full contribution of 20% should be shown<br>
+*Each page total must be shown separately<br>
+*Summary of all page totals must be shown on last page<br>
+</p>
