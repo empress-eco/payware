@@ -2,7 +2,8 @@
 .print-format {
         padding-left: 10mm;
         padding-right: 5mm;
-        padding-top: 10mm;
+        padding-top: 0mm;
+		font-size: 8pt;	
 }
 </style>
 
@@ -10,7 +11,7 @@
 <h4 class="text-center">
 	THE UNITED REPUBLIC OF TANZANIA<br>
 	NATIONAL SOCIAL SECURITY FUND<br>
-	MEMBER'S CONTRIBUTION RECORD<br>
+	MEMBER&apos;S CONTRIBUTION RECORD<br>
 </h4>
 
 <table class="table">
@@ -33,35 +34,125 @@
 	</tbody>
 </table>
 CONTRIBUTION FOR PERMENANT EMPLOYEES (MANDATORY)
+
 <table class="table table-bordered">
+		<colgroup>
+			<col style="width: 3%">
+			<col style="width: 17%">
+			<col style="width: 30%">
+			<col style="width: 12%">
+			<col style="width: 13%">
+			<col style="width: 10%">
+			<col style="width: 15%">
+		</colgroup>
         <thead>
                 <tr>
-                        <th style="width: 4%; text-align: center">{%= __("") %}</th>
-                        <th>{%= __("Emp ID") %}</th>
-                        <th style="width: 35%; text-align: center">{%= __("Insured Person's Name") %}</th>
-                        <th>{%= __("Total Gross") %}</th>
-                        <th>{%= __("Membership No") %}</th>
-                        <th>{%= __("Contributions Tshs (20%)") %}</th>
-                        <th>{%= __("Remarks") %}</th>
+                        <th style="text-align: center">{%= __("") %}</th>
+                        <th style="text-align: center">{%= __("Emp ID") %}</th>
+                        <th style="text-align: center">{%= __("Insured Person's Name") %}</th>
+                        <th style="text-align: center">{%= __("Total Gross") %}</th>
+                        <th style="text-align: center">{%= __("Membership No") %}</th>
+                        <th style="text-align: center">{%= __("Contributions Tshs (20%)") %}</th>
+                        <th style="text-align: center">{%= __("Remarks") %}</th>
                 </tr>
         </thead>
+		{% var ptotal = 0  %}
+        {% var pdata = [] %}
         <tbody>
-        {% for(var i=0, l=data.length; i<l; i++) { %}
+        {% for(var i=0, l=data.length; i<l; i++) { %}  	 
+		     
                 <tr>
                         <td>{%= i+1 %}</td>
                         <td>{%= data[i][ __("Emp ID")] %}</td>
                         <td>{%= data[i][ __("Employee Name")] %}</td>
-                        <td align="right">{%= data[i][ __("Gross Pay")] %} </td>
+                        <td style="text-align: right">{%= data[i][ __("Gross Pay")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </td>
                         <td>{%= data[i][ __("Membership No")] %} </td>
-                        <td align="right">{%= data[i][ __("Contribution")] %} </td>
+                        <td style="text-align: right">{%= data[i][ __("Contribution")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </td>
 						<td>&nbsp;</td>
                 </tr>
-                {% } %}
+				{% var ptotal = ptotal + data[i][ __("Contribution")]  %}
+				{% if ((i+1)%20 == 0) { %} 
+                <tr>
+					<th style="text-align: right" colspan=5><b>TOTAL</b></td>
+					<th style="text-align: right"><b>{%= ptotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></td>
+					<th>&nbsp;</td>
+                </tr>
+				
+			    </tbody>
+				</table>
+				<p class="text-left">
+				<br><br><br>
+				Employer's Signature: ___________________________________<br>
+				<strong>NOTE:</strong><br>
+				*To be used for NSSF registered numbers and full contribution of 20% should be shown<br>
+				*Each page total must be shown separately<br>
+				*Summary of all page totals must be shown on last page<br>
+				</p>
+                 {% pdata.push(ptotal) %}
+				 {% var ptotal = 0  %}
+				 <div class="page-break"></div>
+<h6 class="text-right">Form: NSSF CON.05</h6>
+<h4 class="text-center">
+	THE UNITED REPUBLIC OF TANZANIA<br>
+	NATIONAL SOCIAL SECURITY FUND<br>
+	MEMBER&apos;S CONTRIBUTION RECORD<br>
+</h4>
+
+<table class="table">
+	<tbody>
+		<tr>
+			<td width="50%"> 
+				<strong>Employer Name :</strong> {%= data[0][ __("Company")] %}<br>
+				<strong>Address :</strong> {%= data[0][ __("Company Address")] %}<br>
+				<strong>Employer&apos;s Registration Number :</strong> 99999<br>
+				<strong>Month of Contribution :</strong> January<br>
+				<strong>Regional/District Office :</strong> Ilala<br>
+			</td>
+			<td width="50%"> 
+				<strong>Chq/Mo/Po No.:</strong><br>
+				<strong>Date of Chq/Mo/Po:</strong><br>
+				<strong>Bank/Post Office Branch :</strong><br>
+				<strong>Year :</strong> 2018<br>
+			</td>
+		</tr>
+	</tbody>
+</table>				 
+CONTRIBUTION FOR PERMENANT EMPLOYEES (MANDATORY)
+				 
+				 <table class="table table-bordered">
+				 	<colgroup>
+						<col style="width: 3%">
+						<col style="width: 17%">
+						<col style="width: 30%">
+						<col style="width: 12%">
+						<col style="width: 13%">
+						<col style="width: 10%">
+						<col style="width: 15%">
+				  </colgroup>
+                  <thead>
+                    <tr>
+						<th style="text-align: center">{%= __("") %}</th>
+                        <th style="text-align: center">{%= __("Emp ID") %}</th>
+                        <th style="text-align: center">{%= __("Insured Person's Name") %}</th>
+                        <th style="text-align: center">{%= __("Total Gross") %}</th>
+                        <th style="text-align: center">{%= __("Membership No") %}</th>
+                        <th style="text-align: center">{%= __("Contributions Tshs (20%)") %}</th>
+                        <th style="text-align: center">{%= __("Remarks") %}</th>                    </tr>
+                  </thead>
+				  <tbody>
+				
+			 {% } %}
+			 
+        {% } %}
 
         </tbody>
+		<tr>
+                <th style="text-align: right" colspan=5><b>TOTAL</b></td>
+                <th style="text-align: right"><b>{%= ptotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></td>
+				<th>&nbsp;</td>
+        </tr>
+		{% pdata.push(ptotal) %}
 </table>
-<div class="page-break"></div> 
-This is a remark 
 <p class="text-left">
 <br><br><br>
 Employer's Signature: ___________________________________<br>
@@ -70,3 +161,62 @@ Employer's Signature: ___________________________________<br>
 *Each page total must be shown separately<br>
 *Summary of all page totals must be shown on last page<br>
 </p>
+<div class="page-break"></div>
+
+<h6 class="text-right">Form: NSSF CON.05</h6>		 
+<h4 class="text-center">
+	THE UNITED REPUBLIC OF TANZANIA<br>
+	NATIONAL SOCIAL SECURITY FUND<br>
+	MEMBER&apos;S CONTRIBUTION RECORD<br>
+</h4>
+<table class="table">
+	<tbody>
+		<tr>
+			<td width="50%"> 
+				<strong>Employer Name :</strong> {%= data[0][ __("Company")] %}<br>
+				<strong>Address :</strong> {%= data[0][ __("Company Address")] %}<br>
+				<strong>Employer&apos;s Registration Number :</strong> 99999<br>
+				<strong>Month of Contribution :</strong> January<br>
+				<strong>Regional/District Office :</strong> Ilala<br>
+			</td>
+			<td width="50%"> 
+				<strong>Chq/Mo/Po No.:</strong><br>
+				<strong>Date of Chq/Mo/Po:</strong><br>
+				<strong>Bank/Post Office Branch :</strong><br>
+				<strong>Year :</strong> 2018<br>
+			</td>
+		</tr>
+	</tbody>
+</table>
+PAGE SUMMARY
+   
+   <table class="table table-bordered" style="width: 50%">
+		<colgroup>
+			<col style="width: 25%">
+			<col style="width: 25%">
+		</colgroup>
+		<thead>
+			<tr>
+				<th style="text-align: center">{%= __("PAGE NUMBER") %}</th>
+				<th style="text-align: center">{%= __("AMOUNT") %}</th>
+			</tr>
+		</thead>
+		<tbody>
+	{% var grand_total = 0 %}
+	{% for(var i=0, l=pdata.length; i<l; i++) { %}  
+			<tr>
+				<td>Page No. {%= i+1 %}</td>
+				<td align="right">{%= pdata[i].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</td>
+			</tr>
+			{% grand_total = grand_total + pdata[i] %}
+	{% } %}
+		</tbody>
+		<tfoot>
+			<tr>
+				<th style="text-align: right">TOTAL</th>
+				<th style="text-align: right">{%= grand_total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</th>
+			</tr>
+		</tfoot>
+	</table>
+
+<!---{%= pdata %}	->
