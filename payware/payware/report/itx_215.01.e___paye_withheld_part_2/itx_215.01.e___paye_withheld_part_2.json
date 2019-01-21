@@ -1,0 +1,30 @@
+{
+ "add_total_row": 1, 
+ "creation": "2019-01-16 07:04:58.620797", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "modified": "2019-01-17 17:26:45.570418", 
+ "modified_by": "Administrator", 
+ "module": "Payware", 
+ "name": "ITX 215.01.E - PAYE Withheld Part 2", 
+ "owner": "Administrator", 
+ "prepared_report": 0, 
+ "query": "select \nmin(ss.start_date) as \"Start Date:Date:120\", \nmax(ss.end_date) as \"End Date:Date:120\", \nss.employee_name as \"Employee Name:Data:180\",\nsum(if (sd.salary_component = 'Basic', ifnull(sd.amount,0), 0)) as \"Basic Salary::100\",\nsum(if (sd.salary_component = 'Housing', ifnull(sd.amount,0), 0)) as \"Housing::100\",\nsum(if (sd.salary_component = 'TI', ifnull(sd.amount,0), 0)) as \"Other Allw <br>& Benefits::100\",\nsum(ss.gross_pay) as \"Gross Pay::100\",\nsum(if (sd.salary_component = 'NSSF', ifnull(sd.amount,0), 0)) as \"NSSF::100\",\nsum(if (sd.salary_component = 'PAYE', sd.amount, 0)) as \"PAYE:Float:100\",\nss.company as \"Company::180\"\nfrom `tabSalary Slip` ss  left outer join `tabSalary Detail` sd on sd.parent = ss.name \nwhere ss.start_date >= %(from_date)s\n  and ss.end_date <= %(to_date)s\ngroup by ss.employee_name\nhaving sum(ss.gross_pay) > 0", 
+ "ref_doctype": "Salary Slip", 
+ "report_name": "ITX 215.01.E - PAYE Withheld Part 2", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "HR User"
+  }, 
+  {
+   "role": "HR Manager"
+  }, 
+  {
+   "role": "Employee"
+  }
+ ]
+}

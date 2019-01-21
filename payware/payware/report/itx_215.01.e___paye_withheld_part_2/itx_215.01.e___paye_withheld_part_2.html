@@ -1,0 +1,161 @@
+<style>
+   .print-format {
+   padding-left: 5mm;
+   padding-right: 5mm;
+   padding-top: 0mm;
+   font-size: 9pt;	
+   }
+   .print-format td, .print-format th {
+   vertical-align: top !important;
+   padding: 2px !important;
+   }
+</style>
+<!--
+   <h3 class="manifest-header text-center">
+   	P.A.Y.E. - DETAILS OF PAYMENT OF TAX WITHHELD
+   </h3>
+   
+   -->
+<TABLE cellspacing=0 cellpadding=0 style="border: 0px solid black;">
+   <colgroup>
+      <col style="width: 2%" />      <!-- SI -->
+      <col style="width: 20%"/>      <!-- NAME OF EMPLOYEE -->
+      <col style="width: 5%" />      <!-- PAYROLL NUMBER -->
+      <col style="width: 10%"/>     <!-- POSTAL ADDRESS -->
+      <col style="width: 7%" />      <!-- POSTAL CITY -->
+      <col style="width: 8%" />      <!-- BASIC PAY -->
+      <col style="width: 8%" />      <!-- HOUSING -->
+      <col style="width: 8%" />      <!-- ALLOWANCES AND BENEFIT -->
+      <col style="width: 8%" />      <!-- GROSS PAY -->
+      <col style="width: 8%" />      <!-- DEDUCTION (NSSF)-->
+      <col style="width: 8%" />      <!-- TAXABLE AMOUNT -->
+      <col style="width: 8%" />      <!-- TAX DUE -->
+   </colgroup>
+   <THEAD>
+      <tr>
+         <th colspan=12 style="background-color: #ffffff !important; border: 0px solid black !important;; text-align: center;">
+            <font style="font-size: 13pt; font-weight: bold;">
+				P.A.Y.E. - DETAILS OF PAYMENT OF TAX WITHHELD<br><br>
+            </font>
+            <table cellspacing=0 cellpadding=0 style="border: 0px solid black; vertical-align: top;">
+               <colgroup>
+                  <col style="width: 60%" />
+                  <col style="width: 60%" />
+               </colgroup>
+               <tbody>
+                  <tr>
+                     <td style="border: 0px solid black;">
+                        <font style="font-size: 13pt; font-weight: bold;">Name of Employer: </font>
+                        <font style="font-size: 13pt; font-weight: normal; text-decoration: underline;">
+                        {%= data[0][ __("Company")] %}
+                        </font>
+                     </td>
+                     <td valign=middle style="border: 0px solid black; vertical-align: top;">
+                        <table>
+                           <colgroup>
+                              <col width="50">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                              <col width="30">
+                           </colgroup>
+                           <tbody>
+                              <tr>
+                                 <td><font style="font-size: 13pt; font-weight: bold;">TIN</font></td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; background-color: #000;"></td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; background-color: #000;"></td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; font-size: 13pt; font-weight: bold;">1</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+            <br>					
+         </th>
+      </tr>
+      <TR>
+         <TH style="text-align: center; border: 1px solid black;">SI</TH>
+         <TH style="text-align: center; border: 1px solid black;">NAME OF EMPLOYEE</TH>
+         <TH style="text-align: center; border: 1px solid black;">PAYROLL NUMBER</TH>
+         <TH style="text-align: center; border: 1px solid black;">POSTAL ADDRESS</TH>
+         <TH style="text-align: center; border: 1px solid black;">POSTAL CITY</TH>
+         <TH style="text-align: center; border: 1px solid black;">BASIC PAY</TH>
+         <TH style="text-align: center; border: 1px solid black;">HOUSING</TH>
+         <TH style="text-align: center; border: 1px solid black;">ALLOWANCES AND BENEFIT</TH>
+         <TH style="text-align: center; border: 1px solid black;">GROSS PAY</TH>
+         <TH style="text-align: center; border: 1px solid black;">DEDUCTION (NSSF)</TH>
+         <TH style="text-align: center; border: 1px solid black;">TAXABLE AMOUNT</TH>
+         <TH style="text-align: center; border: 1px solid black;">TAX DUE</TH>
+      </TR>
+   </THEAD>
+   <TBODY>
+		{% 
+			var basic_total=0;
+			var housing_total=0;
+			var other_total=0;
+			var gross_total=0;
+			var nssf_total=0;
+			var tax_amount_total=0;
+			var paye_total=0;
+		%}
+		{% for(var i=0, l=data.length; i<l; i++) { %} 
+		<TR>
+			{% 
+				var taxable_amount = data[i][ __("Gross Pay")] - data[i][ __("NSSF")];
+				var housing = data[i][ __("Housing")]|| 0;
+				var other = data[i][ __("Other Allw and Benefits")]|| 0;
+				var paye = data[i][ __("PAYE")]|| 0;
+				
+				var basic_total = basic_total + data[i][ __("Basic Salary")];	
+				var housing_total= housing_total + housing;
+				var other_total = other_total + other;
+				var gross_total = gross_total + data[i][ __("Gross Pay")];
+				var nssf_total = nssf_total +  data[i][ __("NSSF")];
+				var tax_amount_total = tax_amount_total + taxable_amount;
+				var paye_total = paye_total + paye;
+			%}
+			<TD style="text-align: left; border: 1px solid black;">{%= i+1 %}</TD>
+			<TD style="text-align: left; border: 1px solid black;">{%= data[i][ __("Employee Name")] %}</TD>
+			<TD style="text-align: left; border: 1px solid black;">{%= i+1 %}</TD>
+			<TD style="text-align: left; border: 1px solid black;">&nbsp;</TD>
+			<TD style="text-align: left; border: 1px solid black;">&nbsp;</TD>
+			<TD style="text-align: right; border: 1px solid black;">{%= data[i][ __("Basic Salary")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TD>
+			<TD style="text-align: right; border: 1px solid black;">{%= housing %}</TD>
+			<TD style="text-align: right; border: 1px solid black;">{%= other %}</TD>
+			<TD style="text-align: right; border: 1px solid black;">{%= data[i][ __("Gross Pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})  %}</TD>
+			<TD style="text-align: right; border: 1px solid black;">{%= data[i][ __("NSSF")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})  %}</TD>
+			<TD style="text-align: right; border: 1px solid black;">{%= taxable_amount.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TD>
+			<TD style="text-align: right; border: 1px solid black;">{%= paye.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TD>
+		</TR>
+      {% } %}
+   </TBODY>
+   <!--<TFOOT>
+		<TR>
+			<TH COLSPAN=5 style="text-align: right; border: 1px solid black;">TOTAL</TH>
+			<TH style="text-align: right; border: 1px solid black;">{%= basic_total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
+			<TH style="text-align: right; border: 1px solid black;">{%= housing_total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
+			<TH style="text-align: right; border: 1px solid black;">{%= other_total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
+			<TH style="text-align: right; border: 1px solid black;">{%= gross_total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})  %}</TH>
+			<TH style="text-align: right; border: 1px solid black;">{%= nssf_total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})  %}</TH>
+			<TH style="text-align: right; border: 1px solid black;">{%= taxable_amount.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
+			<TH style="text-align: right; border: 1px solid black;">{%= tax_amount_total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>			
+		</TR>
+   </TFOOT>-->
+</TABLE>
