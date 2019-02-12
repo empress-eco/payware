@@ -1,0 +1,23 @@
+[
+ {
+  "align_labels_right": 0,
+  "css": null,
+  "custom_format": 1,
+  "default_print_language": null,
+  "disabled": 0,
+  "doc_type": "PaywareList",
+  "docstatus": 0,
+  "doctype": "Print Format",
+  "font": "Default",
+  "format_data": null,
+  "html": null,
+  "line_breaks": 0,
+  "modified": "2018-05-22 21:46:53.714145",
+  "module": "Payware",
+  "name": "WCF-3 v2",
+  "print_format_builder": 1,
+  "print_format_type": "Server",
+  "show_section_headings": 0,
+  "standard": "Yes"
+ }
+]
