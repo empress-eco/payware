@@ -78,14 +78,24 @@ app_license = "MIT"
 # Document Events
 # ---------------
 # Hook on document methods and events
+'''
+doc_events = {
+	"Salary Slip": {
+		"validate": "payware.payware.salary_slip_hook.generate_component_in_salary_slip",
+		"before_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip",
+		"before_insert": "payware.payware.salary_slip_hook.generate_component_in_salary_slip",
+		"after_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip",
+		"after_insert": "payware.payware.salary_slip_hook.generate_component_in_salary_slip"
+	}
+}
+'''
+doc_events = {
+	"Salary Slip": {
+		"before_insert": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_insert",
+		"before_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_update"
+	}
+}
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-#	}
-# }
 
 # Scheduled Tasks
 # ---------------
