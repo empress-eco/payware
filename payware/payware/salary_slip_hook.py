@@ -38,6 +38,7 @@ def generate_component_in_salary_slip_insert(doc, method):
 	if frappe.db.get_single_value('Payware Settings', 'ot_module'):
 		doc.salary_slip_ot_component = []
 		employee = frappe.get_doc("Employee",doc.employee)
+		doc.run_method("get_emp_and_leave_details")
 		base = None
 		list = []
 		for component in doc.earnings:
@@ -47,7 +48,7 @@ def generate_component_in_salary_slip_insert(doc, method):
 				list.append(component)
 			
 		if base == None:
-			frappe.throw("Basic Component not Found")
+			frappe.throw("Basic Component not Found 2")
 		
 		
 		for component in employee.employee_ot_component:
