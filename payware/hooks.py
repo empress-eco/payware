@@ -75,6 +75,8 @@ app_license = "MIT"
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
+fixtures = ["Custom Script", {"doctype":"Print Format", "filters": [{"module":"Payware"}]}, {"doctype":"Report", "filters": [{"module":"Payware"}]} ]
+
 # Document Events
 # ---------------
 # Hook on document methods and events
