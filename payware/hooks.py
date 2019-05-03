@@ -80,31 +80,23 @@ fixtures = ["Custom Script", {"doctype":"Print Format", "filters": [{"module":"P
 # Document Events
 # ---------------
 # Hook on document methods and events
-'''
-doc_events = {
-	"Salary Slip": {
-		"validate": "payware.payware.salary_slip_hook.generate_component_in_salary_slip",
-		"before_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip",
-		"before_insert": "payware.payware.salary_slip_hook.generate_component_in_salary_slip",
-		"after_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip",
-		"after_insert": "payware.payware.salary_slip_hook.generate_component_in_salary_slip"
-	}
-}
-'''
-doc_events = {
-	"Salary Slip": {
-		"before_insert": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_insert",
-		"before_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_update",
-		"on_submit": "payware.payware.utils.set_loan_paid asdfds",
-		"on_cancel": "payware.payware.utils.set_loan_unpaid"
-	}
-}
 
 doc_events = {
 	"Loan": {
 		"on_submit": "payware.payware.utils.create_disbursement_journal_entry"
+	},
+	"Salary Slip": {
+		"on_submit": "payware.payware.utils.set_loan_paid",
+		"on_cancel": "payware.payware.utils.set_loan_paid",
+		"before_insert": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_insert",
+		"before_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_update"
+	},
+	"Loan Repayment Not From Salary": {
+		"on_submit": "payware.payware.utils.create_loan_repayment_jv",
+		"on_cancel": "payware.payware.utils.create_loan_repayment_jv"
 	}
 }
+
 # Scheduled Tasks
 # ---------------
 
