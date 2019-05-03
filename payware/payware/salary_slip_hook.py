@@ -42,13 +42,13 @@ def generate_component_in_salary_slip_insert(doc, method):
 		base = None
 		list = []
 		for component in doc.earnings:
-			frappe.msgprint("Basic Component is: " + str(component.salary_component).upper())
+			#frappe.msgprint("Basic Component is: " + str(component.salary_component).upper())
 			if str(component.salary_component).upper() == "BASIC":
 				base = component.amount
 				list.append(component)
 			
 		if base == None:
-			frappe.throw("Basic Component not Found 2")
+			frappe.throw("Basic Component not Found")
 		
 		
 		for component in employee.employee_ot_component:

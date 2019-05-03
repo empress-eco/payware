@@ -5,6 +5,10 @@
         padding-top: 0mm;
 		font-size: 8pt;	
 }
+
+.print-format {
+	font-family: 'Arial';
+}
 </style>
 
 <h6 class="text-right">Form: NSSF CON.05</h6>
@@ -74,7 +78,7 @@ CONTRIBUTION FOR PERMENANT EMPLOYEES (MANDATORY)
 				{% if ((i+1)%20 == 0) { %} 
                 <tr>
 					<th style="text-align: right" colspan=5><b>TOTAL</b></td>
-					<th style="text-align: right"><b>{%= ptotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></td>
+					<th style="text-align: right"><b>{%= ptotal %}</b></td>
 					<th>&nbsp;</td>
                 </tr>
 				

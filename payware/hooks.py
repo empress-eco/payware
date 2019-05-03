@@ -94,11 +94,17 @@ doc_events = {
 doc_events = {
 	"Salary Slip": {
 		"before_insert": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_insert",
-		"before_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_update"
+		"before_save": "payware.payware.salary_slip_hook.generate_component_in_salary_slip_update",
+		"on_submit": "payware.payware.utils.set_loan_paid asdfds",
+		"on_cancel": "payware.payware.utils.set_loan_unpaid"
 	}
 }
 
-
+doc_events = {
+	"Loan": {
+		"on_submit": "payware.payware.utils.create_disbursement_journal_entry"
+	}
+}
 # Scheduled Tasks
 # ---------------
 
