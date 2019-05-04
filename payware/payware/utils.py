@@ -103,25 +103,20 @@ def create_loan_repayment_jv(doc, method):
 	])
 	
 	# Create records in NFS child doctype of Loan doctype
-	'''
-	doc = frappe.get_doc("Sales Order")
-	row = doc.append("items", {})
-	row.item_code = "Test Item"
-	row.qty = 2
-	
-	or you can also use the following format
-
-	doc = frappe.get_doc("Sales Order")
-	row = doc.append("items", {
-		"item_code": "Test Item",
-		"qty": 2
-	})
-	'''
-	loan_nfs_row = loan_doc.append("loan_repayments_not_from_salary")
-	Loan NFS Repayments
-	# Update total_payments of Loan doctype
-	frappe.set_value("Loan", loan_doc.name, "total_payments", total_payments -= payment_account)
-	# Update balance of loan of Repayment Schedule child doctype of Loan doctype 
+	if method == "on_submit":
+		loan_nfs_row = loan_doc.append("loan_repayments_not_from_salary")
+		loan_nfs_row.company = doc.company
+		loan_nfs_row.loan = loan_doc.name	
+		loan_nfs_row.payment_date = doc.payment_date
+		loan_nfs_row.payment_amount = doc.payment_amount
+		# Update total_payments of Loan doctype
+		loan_doc.total_payments -= doc.payment_account
+	elif method == "on_cancel":
+		#https://discuss.erpnext.com/t/how-to-delete-a-particular-row-from-a-child-table/14759
+		# Update total_payments of Loan doctype
+		loan_doc.total_payments += doc.payment_account
+	loan_doc.save()
+	# Update loan of Repayment Schedule child doctype of Loan doctype and set the balances right as per date
 	
 	journal_entry.save(ignore_permissions = True)
 	frappe.set_value(doc.doctype, doc.name, "journal_name", journal_entry.name)
