@@ -104,13 +104,13 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"payware.tasks.all"
 # 	],
-# 	"daily": [
-# 		"payware.tasks.daily"
-# 	],
+ 	"daily": [
+ 		"payware.payware.utils.generate_additional_salary_records"
+ 	],
 # 	"hourly": [
 # 		"payware.tasks.hourly"
 # 	],
@@ -120,7 +120,7 @@ doc_events = {
 # 	"monthly": [
 # 		"payware.tasks.monthly"
 # 	]
-# }
+}
 
 # Testing
 # -------
