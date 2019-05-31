@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
+import json
 import frappe
 from frappe.model.document import Document
 from dateutil.relativedelta import relativedelta
-from frappe.utils import cint, flt, nowdate, add_days, getdate, fmt_money, add_to_date, DATE_FORMAT, date_diff, rounded, add_months
+from frappe.utils import cint, format_datetime,get_datetime_str,now_datetime,add_days,today,formatdate,date_diff,getdate,add_months,flt, nowdate, fmt_money, add_to_date, DATE_FORMAT, rounded
 from frappe import _
 from erpnext.accounts.utils import get_fiscal_year
 from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
@@ -122,7 +123,7 @@ def create_loan_repayment_jv(doc, method):
 	redo_repayment_schedule(doc, method)
 	set_repayment_period(loan.name)
 	calculate_totals(loan.name)
-	
+
 	if method == "on_submit":
 		frappe.set_value(doc.doctype, doc.name, "journal_name", journal_entry.name)
 		msg_to_print = doc.doctype + " journal " + journal_entry.name + " has been created."
@@ -222,3 +223,92 @@ def calculate_totals(loan_docname):
 		if data.paid:
 			loan.total_amount_paid += data.total_payment
 	loan.save()
+
+@frappe.whitelist()
+def create_additional_salary_journal(doc, method):
+	if (frappe.get_value("Salary Component", doc.salary_component, "create_cash_journal")):
+		salary_component = frappe.get_doc("Salary Component", doc.salary_component)
+		cash_account = frappe.db.get_single_value("Payware Settings", "default_account_for_additional_component_cash_journal")
+		component_account = frappe.db.get_value("Salary Component Account", {"parent": doc.salary_component, "company": doc.company}, "default_account")
+		#frappe.msgprint("Expense account is: " + str(component_account))
+		if method == "on_submit":
+			dr_account = component_account
+			cr_account = cash_account
+		elif method == "on_cancel":
+			dr_account = cash_account
+			cr_account = component_account
+		else:
+			frappe.msgprint("Unknown method on create_additional_salary_journal")
+			return
+
+		#frappe.msgprint("Method fired: " + method)
+		precision = frappe.get_precision("Journal Entry Account", "debit_in_account_currency")
+		journal_entry = frappe.new_doc('Journal Entry')
+		journal_entry.voucher_type = 'Cash Entry'
+		journal_entry.user_remark = _('{0} - {1} - Additional salary {2} for {3}').format(doc.doctype, doc.name, doc.salary_component, doc.employee_name)
+		journal_entry.company = doc.company
+		journal_entry.posting_date = doc.payroll_date
+
+		payment_amount = flt(doc.amount, precision)
+
+		journal_entry.set("accounts", [
+			{
+				"account": dr_account,
+				"debit_in_account_currency": payment_amount
+			},
+			{
+				"account": cr_account,
+				"credit_in_account_currency": payment_amount
+			}
+		])
+		journal_entry.save(ignore_permissions = True)
+
+		if method == "on_submit":
+			frappe.set_value(doc.doctype, doc.name, "journal_name", journal_entry.name)
+			msg_to_print = doc.doctype + " journal " + journal_entry.name + " has been created."
+		elif method == "on_cancel":
+			msg_to_print = doc.doctype + " reverse journal " + journal_entry.name + " has been created."
+		frappe.msgprint(msg_to_print)
+
+@frappe.whitelist()
+def generate_additional_salary_records():
+	today_date = today()
+	additional_salary_list = frappe.get_all("Additional Salary", filters={"docstatus": "1", "auto_repeat_frequency": ("!=", "None"), "auto_repeat_end_date": ("!=", None), "auto_repeat_end_date": ("<=", today_date)}, fields="name")
+	#frappe.msgprint("Additional Salary List lookedup: " + str(additional_salary_list))
+	if additional_salary_list:
+		#frappe.msgprint("In the salary loop")
+		for additional_salary_doc in additional_salary_list:
+			cur_additional_salary_doc = frappe.get_doc("Additional Salary", additional_salary_doc.name)
+			#frappe.msgprint("New Additional Salary Doc loaded: ")
+			#frappe.msgprint(str(cur_additional_salary_doc.auto_repeat_end_date) + " auto repeat end date loaded.")
+			#frappe.msgprint(str(cur_additional_salary_doc.last_transaction_date) + " last transaction date loaded.")
+			#frappe.msgprint(str(cur_additional_salary_doc.auto_repeat_frequency) + " auto repeat frequency loaded.")
+			cur_additional_salary_doc.last_transaction_date
+			if cur_additional_salary_doc.last_transaction_date == None:
+				#frappe.msgprint("Blank last transaction date found for " + cur_additional_salary_doc.name + ". Setting payroll date of original transaction")
+				cur_additional_salary_doc.last_transaction_date = cur_additional_salary_doc.payroll_date
+			if cur_additional_salary_doc.auto_repeat_frequency == "Weekly":
+				next_date = add_days(getdate(cur_additional_salary_doc.last_transaction_date), 7)
+			else:
+				#frappe.msgprint("auto_repeat_frequency must be Monthly or Annually")
+				frequency_factor = auto_repeat_frequency.get(cur_additional_salary_doc.auto_repeat_frequency, "Invalid frequency")
+				if frequency_factor == "Invalid frequency":
+					frappe.throw("Invalid frequency: {0} not found. Contact the developers!".format(cur_additional_salary_doc.auto_repeat_frequency))
+				next_date = add_months(getdate(cur_additional_salary_doc.last_transaction_date), frequency_factor)
+			if next_date <= today_date:
+				#frappe.msgprint("New additional salary will be created for " + cur_additional_salary_doc.auto_repeat_frequency + " dated " + str(next_date))
+				additional_salary = frappe.new_doc('Additional Salary')
+				additional_salary.employee = cur_additional_salary_doc.employee
+				additional_salary.payroll_date = next_date
+				additional_salary.salary_component = cur_additional_salary_doc.salary_component
+				additional_salary.employee_name = cur_additional_salary_doc.employee_name
+				additional_salary.amount = cur_additional_salary_doc.amount
+				additional_salary.company = cur_additional_salary_doc.company
+				additional_salary.overwrite_salary_structure_amount = cur_additional_salary_doc.overwrite_salary_structure_amount
+				additional_salary.type = cur_additional_salary_doc.type
+				additional_salary.auto_repeat_frequency = "None"
+				additional_salary.auto_created_based_on = cur_additional_salary_doc.name
+				additional_salaryauto_repeat_end_date = None
+				additional_salarylast_transaction_date = None
+				additional_salary.save(ignore_permissions = True)
+				frappe.set_value("Additional Salary", cur_additional_salary_doc.name, "last_transaction_date", next_date)

@@ -94,6 +94,10 @@ doc_events = {
 	"Loan Repayment Not From Salary": {
 		"on_submit": "payware.payware.utils.create_loan_repayment_jv",
 		"on_cancel": "payware.payware.utils.create_loan_repayment_jv"
+	},
+	"Additional Salary": {
+		"on_submit": "payware.payware.utils.create_additional_salary_journal",
+		"on_cancel": "payware.payware.utils.create_additional_salary_journal"
 	}
 }
 
@@ -129,4 +133,3 @@ doc_events = {
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "payware.event.get_events"
 # }
-
