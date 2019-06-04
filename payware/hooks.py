@@ -110,7 +110,7 @@ scheduler_events = {
 # 	],
  	"daily": [
  		"payware.payware.utils.generate_additional_salary_records"
- 	],
+ 	]
 # 	"hourly": [
 # 		"payware.tasks.hourly"
 # 	],
