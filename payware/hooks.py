@@ -79,10 +79,8 @@ doctype_js = {
 # }
 
 fixtures = [
-	"Custom Script", {
-		"doctype":"Print Format", "filters": [{"module":"Payware"}]
-		},
-		{"doctype":"Report", "filters": [{"module":"Payware"}]}
+	{"doctype":"Print Format", "filters": [{"module":"Payware"}]},
+	{"doctype":"Report", "filters": [{"module":"Payware"}]},
 ]
 
 # Document Events
