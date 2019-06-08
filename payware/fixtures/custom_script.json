@@ -1,14 +1,1 @@
-[
- {
-  "docstatus": 0, 
-  "doctype": "Custom Script", 
-  "dt": "Additional Salary", 
-  "modified": "2019-05-24 11:10:12.609335", 
-  "name": "Additional Salary-Client", 
-  "parent": null, 
-  "parentfield": null, 
-  "parenttype": null, 
-  "script": "frappe.ui.form.on('Additional Salary', {\n\trefresh: function(frm) {\n\t\tcur_frm.add_custom_button(__(\"Generate Additional Salary Records\"), function() {\n\t\t\tgenerate_additional_salary_records();\n\t\t});\n\t}\n});\nvar generate_additional_salary_records = function(){\n\tfrappe.call({\n\t\tmethod: \"payware.payware.utils.generate_additional_salary_records\",\n\t\targs: {},\n\t\tcallback: function(){\n\t\t\tcur_frm.reload_doc();\n\t\t}\n\t});\n};\n", 
-  "script_type": "Client"
- }
-]
+[]

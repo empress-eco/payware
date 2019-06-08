@@ -26,7 +26,10 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Loan" : "payware/loan.js"}
+doctype_js = {
+	"Loan" : "payware/loan.js",
+	"Additional Salary" : "payware/additional_salary.js",
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -75,7 +78,12 @@ doctype_js = {"Loan" : "payware/loan.js"}
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
-fixtures = ["Custom Script", {"doctype":"Print Format", "filters": [{"module":"Payware"}]}, {"doctype":"Report", "filters": [{"module":"Payware"}]} ]
+fixtures = [
+	"Custom Script", {
+		"doctype":"Print Format", "filters": [{"module":"Payware"}]
+		},
+		{"doctype":"Report", "filters": [{"module":"Payware"}]}
+]
 
 # Document Events
 # ---------------
