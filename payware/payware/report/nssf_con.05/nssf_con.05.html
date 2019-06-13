@@ -97,7 +97,7 @@ CONTRIBUTION FOR PERMENANT EMPLOYEES (MANDATORY)
 		{% if ((i+1)%20 == 0) { %} 
         <tr>
 			<th style="text-align: right" colspan=5><b>TOTAL</b></td>
-			<th style="text-align: right"><b>{%= frappe.format(ptotal) %}</b></td>
+			<th style="text-align: right"><b>{%= ptotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></td>
 			<th>&nbsp;</td>
         </tr>
 				
