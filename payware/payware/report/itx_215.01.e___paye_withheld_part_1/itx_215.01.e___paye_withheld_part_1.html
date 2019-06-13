@@ -14,8 +14,8 @@
 	}
 </style>
 
-{% var start_date = data[0][ __("Start Date")]  %}
-{% var end_date = data[0][ __("End Date")]  %}
+{% var start_date = filters.from_date  %}
+{% var end_date = filters.to_date  %}
 {% var tin = data[0][ __("TIN")]  %}
 
 {% if ( end_date[5]+ end_date[6] == "06") { %}
@@ -35,7 +35,7 @@
 	</h3>
 
 <h4>
-	<table cellspacing=0 cellpadding=0 style="border: 1px solid black;">
+	<table cellspacing=0 cellpadding=0 style="border: 0px solid black;">
 	  <colgroup>
 		<col style="width: 50%" />
 		<col style="width: 50%" />
