@@ -246,7 +246,7 @@ def create_additional_salary_journal(doc, method):
 		precision = frappe.get_precision("Journal Entry Account", "debit_in_account_currency")
 		journal_entry = frappe.new_doc('Journal Entry')
 		journal_entry.voucher_type = 'Cash Entry'
-		journal_entry.user_remark = _('{0} - {1} - Additional salary {2} for {3}').format(doc.doctype, doc.name, doc.salary_component, doc.employee_name)
+		journal_entry.user_remark = _('{2} by {1} for {3}').format(doc.doctype, doc.name, doc.salary_component, doc.employee_name)
 		journal_entry.company = doc.company
 		journal_entry.posting_date = doc.payroll_date
 
@@ -270,7 +270,8 @@ def create_additional_salary_journal(doc, method):
 		elif method == "on_cancel":
 			msg_to_print = doc.doctype + " reverse journal " + journal_entry.name + " has been created."
 		frappe.msgprint(msg_to_print)
-	frappe.set_value("Additional Salary", doc.auto_created_based_on, "last_transaction_amount", doc.amount)
+	if (doc.auto_created_based_on):
+		frappe.set_value("Additional Salary", doc.auto_created_based_on, "last_transaction_amount", doc.amount)
 
 @frappe.whitelist()
 def generate_additional_salary_records():
