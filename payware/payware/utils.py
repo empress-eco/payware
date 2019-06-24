@@ -105,7 +105,7 @@ def create_loan_repayment_jv(doc, method):
 
 	# Create records in NFS child doctype of Loan doctype
 	if method == "on_submit":
-		frappe.msgprint("loan nfs repayment appending...")
+		#frappe.msgprint("loan nfs repayment appending...")
 		loan_nfs_row = loan.append("loan_repayments_not_from_salary")
 		loan_nfs_row.nfs_loan_repayment = doc.name
 		loan_nfs_row.company = doc.company
@@ -141,6 +141,9 @@ def redo_repayment_schedule(doc, method):
 	#frappe.msgprint("This is the loan object: " + str(loan.name))
 	#frappe.msgprint("This is the repayment schedule length: " + str(len(loan.repayment_schedule)))
 
+	if (loan.docstatus != 1):
+		frappe.throw("The loan is not submitted. Please Submit the loan and try again.")
+
 	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "total_payment", "payment_date"], filters={"parent": loan.name})
 
 	payment_date = loan.repayment_start_date
@@ -172,7 +175,8 @@ def redo_repayment_schedule(doc, method):
 	balance_amount = loan.loan_amount - total_repayments - total_nfs_repayments
 	frappe.msgprint("Repayments records balance: " + str(balance_amount) + " with total repayments = " + str(total_repayments) + " and total nfs repayments = " + str(total_nfs_repayments))
 
-	# Find next payment date
+	# Find next payment date, set the first date as repayment start date in case the repayments are not paid yet.
+	last_payment_date = loan.repayment_start_date
 	for repayment_schedule in repayment_schedule_list:
 		last_payment_date = repayment_schedule.payment_date
 	payment_date = add_months(last_payment_date, 1)
