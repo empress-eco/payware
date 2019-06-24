@@ -3,7 +3,7 @@
         padding-left: 10mm;
         padding-right: 5mm;
         padding-top: 5mm;
-		font-size: 11pt;	
+		font-size: 11pt !important;	
 }
 
 .print-format td, .print-format th {
@@ -41,8 +41,7 @@
 @media screen {
 	.print-format {
 		width: 8.5in;
-		height: 11in;
-		font-size: 11pt;
+		font-size: 11pt !important;	
 	}
 	.print-format td, .print-format th {
 		vertical-align: top !important;
@@ -80,6 +79,21 @@
 {% var tin = data[0][ __("TIN")]  %}
 {% var sdl_rate = data[0][ __("SDL Rate")] %}
 
+
+
+{%
+	
+	var subtotalA = data[0][ __("Basic pay")] + data[0][ __("Leave pay")] + data[0][ __("Sick pay")] +
+					data[0][ __("Payment in Lieu of Leave")] + data[0][ __("Fees")] + 
+					data[0][ __("Commission")] + data[0][ __("Bonus")];
+					
+	var subtotalB = data[0][ __("Gratuity")] + data[0][ __("Subsistence Allowance")] + data[0][ __("Traveling Allowance")] +
+					data[0][ __("Entertainment Allowance")] + data[0][ __("Housing Allowance")] + 
+					data[0][ __("Any Other Allowances")];
+	
+	var grand_total = subtotalA + subtotalB;
+
+%}
 <p class="manifest-header text-center">
    <img src="/private/files/tra-logo.gif" style="width: 35%;"/>
 </p>
@@ -229,7 +243,7 @@
 		<tr>
 			<td colspan=2>
 				<hr style="border-top: solid 1px;" />
-				I forward herewith SDL Return for the month of ……………………20..……………………………
+				I forward herewith SDL Return for the month of <u>&nbsp;&nbsp;&nbsp;{%= data[0][ __("Month")] %}&nbsp;&nbsp;&nbsp;</u>
 				<table class="table table-bordered">
 					<colgroup>
 						<col width="30%">
@@ -237,6 +251,21 @@
 						<col width="30%">
 						<col width="20%">
 					</colgroup>
+					<!--
+						Basic pay
+						Leave pay
+						Sick pay
+						Payment in Lieu of Leave
+						Fees
+						Commission
+						Bonus
+						Gratuity
+						Subsistence Allowance
+						Traveling Allowance
+						Entertainment Allowance
+						Housing Allowance
+						Any Other Allowances
+					-->
 					<tr>
 						<th>EMOLUMENTS</th>
 						<th>AMOUNT / TZS</th>
@@ -245,57 +274,57 @@
 					</tr>
 					<tr>
 						<td>Basic pay</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Basic pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 						<td>Gratuity</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Gratuity")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 					</tr>
 					<tr>
 						<td>Leave pay</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Leave pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 						<td>Subsistence Allowance *)</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Subsistence Allowance")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 					</tr>
 					<tr>
 						<td>Sick pay</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Sick pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 						<td>Traveling Allowance *)</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Traveling Allowance")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 					</tr>
 					<tr>
 						<td>Payment in Lieu of leave</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Gratuity")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 						<td>Entertainment Allowance *)</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Gratuity")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 					</tr>
 					<tr>
 						<td>Fees</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Fees")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 						<td>Any other Allowance *)</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Any Other Allowances")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 					</tr>
 					<tr>
 						<td>Commission</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Gratuity")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 						<td>Housing Allowance</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Housing Allowance")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 					</tr>
 					<tr>
 						<td>Bonus</td>
-						<td></td>
+						<td style="text-align: right;">{%= data[0][ __("Bonus")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 						<td>Subtotal B</td>
-						<td></td>
+						<td style="text-align: right;">{%= subtotalB.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 					</tr>
 					<tr>
 						<td>Subtotal A</td>
-						<td></td>
-						<td>Grand Total (A+B)</td>
-						<td></td>
+						<td style="text-align: right;">{%= subtotalA.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
+						<td><b>Grand Total (A+B)</b></td>
+						<td style="text-align: right;">{%= grand_total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</td>
 					</tr>
 					<tr>
 						<th></th>
 						<th></th>
 						<th>Whereof SDL at {%= sdl_rate %}%<br>amounts to</th>
-						<th></th>
+						<th  style="text-align: right;">{%= data[0][ __("SDL")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</th>
 					</tr>
 				</table>
 				Payment made at the Bank Branch ……………………………………………………………………..

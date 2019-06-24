@@ -158,11 +158,16 @@ def redo_repayment_schedule(doc, method):
 	loan = frappe.get_doc("Loan", str(loan_docname))
 
 	# Find total of repayments made
-	#frappe.msgprint("finding total repayemnts made")
+	# Also Find next payment date, set the first date as repayment start date in case the repayments are not paid yet.
+	#frappe.msgprint("Also finding total repayemnts made")
 	total_repayments = 0
+	last_payment_date = loan.repayment_start_date
 	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "total_payment", "payment_date"], filters={"parent": loan.name})
 	for repayment_schedule in repayment_schedule_list:
 		total_repayments += repayment_schedule.total_payment
+		last_payment_date = repayment_schedule.payment_date
+	if (payment_date != last_payment_date):
+		payment_date = add_months(last_payment_date, 1)
 
 	# Find total of NFS repayments made
 	#frappe.msgprint("finding total repayemnts made")
@@ -175,16 +180,10 @@ def redo_repayment_schedule(doc, method):
 	balance_amount = loan.loan_amount - total_repayments - total_nfs_repayments
 	frappe.msgprint("Repayments records balance: " + str(balance_amount) + " with total repayments = " + str(total_repayments) + " and total nfs repayments = " + str(total_nfs_repayments))
 
-	# Find next payment date, set the first date as repayment start date in case the repayments are not paid yet.
-	last_payment_date = loan.repayment_start_date
-	for repayment_schedule in repayment_schedule_list:
-		last_payment_date = repayment_schedule.payment_date
-	payment_date = add_months(last_payment_date, 1)
-
 	# Insert rows starting balance_amount till it is 0
 	while(balance_amount > 0):
 		#frappe.msgprint("Creating repayments records with balance: " + str(balance_amount))
-		interest_amount = rounded(balance_amount * flt(loan.rate_of_interest) / (12*100))
+		interest_amount = rounded(balance_amount * flt(loan.rate_of_interest) / (12 * 100))
 		principal_amount = loan.monthly_repayment_amount - interest_amount
 		balance_amount = rounded(balance_amount + interest_amount - loan.monthly_repayment_amount)
 
