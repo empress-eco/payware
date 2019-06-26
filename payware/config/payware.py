@@ -53,7 +53,7 @@ def get_data():
 				},
 				{
 					"type": "report",
-					"name": "ITX 220.01.E - Employer’s Half Year Certificate",
+					"name": "ITX 220.01.E - Employer's Half Year Certificate",
 					"doctype": "Salary Slip",
 					"is_query_report": True,
 				},
