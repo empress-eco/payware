@@ -120,7 +120,7 @@ def create_loan_repayment_jv(doc, method):
 			frappe.delete_doc("Loan NFS Repayments", repayment.name)
 
 	# Update loan of Repayment Schedule child doctype of Loan doctype and set the balances right as per date
-	redo_repayment_schedule(doc, method)
+	redo_repayment_schedule(loan.name)
 	set_repayment_period(loan.name)
 	calculate_totals(loan.name)
 
@@ -132,37 +132,42 @@ def create_loan_repayment_jv(doc, method):
 	frappe.msgprint(msg_to_print)
 
 @frappe.whitelist()
-def redo_repayment_schedule(doc, method):
-	#frappe.msgprint("loan repayment schedule redone started")
-	loan_docname = frappe.get_value("Loan Repayment Not From Salary", doc.name, "loan")
-	# Identify pending schedule and remove those lines from schedule
-	#frappe.msgprint("This is the parameter passed: " + str(loan_docname))
-	loan = frappe.get_doc("Loan", str(loan_docname))
+def redo_repayment_schedule(loan_name):
+	#frappe.msgprint("This is the parameter passed: " + str(loan_name))
+	loan = frappe.get_doc("Loan", str(loan_name))
 	#frappe.msgprint("This is the loan object: " + str(loan.name))
 	#frappe.msgprint("This is the repayment schedule length: " + str(len(loan.repayment_schedule)))
 
 	if (loan.docstatus != 1):
 		frappe.throw("The loan is not submitted. Please Submit the loan and try again.")
 
-	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "total_payment", "payment_date"], filters={"parent": loan.name})
+	# Identify pending schedule and remove those lines from schedule
+	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "skip", "total_payment", "payment_date"], filters={"parent": loan.name})
 
 	payment_date = loan.repayment_start_date
-	# Delete all non-paid records from schedule
+	row_balance_amount = loan.loan_amount
+	# Delete all non-paid and not-skipped records from schedule
 	for repayment_schedule in repayment_schedule_list:
-		if repayment_schedule.paid == 0:
+		# frappe.msgprint(str(repayment_schedule.payment_date) + " skip status = " + str(repayment_schedule.skip) + " amount " + str(repayment_schedule.principal_amount))
+		if (repayment_schedule.skip == 1):
+			frappe.set_value("Repayment Schedule", repayment_schedule.name, "principal_amount", 0)
+			frappe.set_value("Repayment Schedule", repayment_schedule.name, "interest_amount", 0)
+			frappe.set_value("Repayment Schedule", repayment_schedule.name, "total_payment", 0)
+			frappe.set_value("Repayment Schedule", repayment_schedule.name, "balance_loan_amount", 0)
+		if (repayment_schedule.paid == 0 and repayment_schedule.skip == 0):
 			frappe.db.sql("""update `tabRepayment Schedule` set docstatus = 0 where name = %s""", repayment_schedule.name)
-			#frappe.msgprint("repayment schedule being cleared for record: " + str(repayment_schedule.name))
+			# frappe.msgprint("Repayment schedule being cleared for record: " + str(repayment_schedule.name))
 			frappe.delete_doc("Repayment Schedule", repayment_schedule.name)
 
 	# Reload the loan doc after deleting records
-	loan = frappe.get_doc("Loan", str(loan_docname))
+	loan = frappe.get_doc("Loan", str(loan_name))
 
 	# Find total of repayments made
 	# Also Find next payment date, set the first date as repayment start date in case the repayments are not paid yet.
 	#frappe.msgprint("Also finding total repayemnts made")
 	total_repayments = 0
 	last_payment_date = loan.repayment_start_date
-	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "total_payment", "payment_date"], filters={"parent": loan.name})
+	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "skip", "total_payment", "payment_date"], filters={"parent": loan.name})
 	for repayment_schedule in repayment_schedule_list:
 		total_repayments += repayment_schedule.total_payment
 		last_payment_date = repayment_schedule.payment_date
@@ -172,13 +177,15 @@ def redo_repayment_schedule(doc, method):
 	# Find total of NFS repayments made
 	#frappe.msgprint("finding total repayemnts made")
 	total_nfs_repayments = 0
-	nfs_repayment_schedule_list = frappe.get_all("Loan NFS Repayments", fields=["parent", "payment_amount"], filters={"parent": loan.name})
+	nfs_repayment_schedule_list = frappe.get_all("Loan NFS Repayments", fields=["parent", "payment_amount"], filters={"parent": loan.name, "docstatus": 1})
 	for nfs_repayment_schedule in nfs_repayment_schedule_list:
 		total_nfs_repayments += nfs_repayment_schedule.payment_amount
 
 	# Find new balance_amount
 	balance_amount = loan.loan_amount - total_repayments - total_nfs_repayments
-	frappe.msgprint("Repayments records balance: " + str(balance_amount) + " with total repayments = " + str(total_repayments) + " and total nfs repayments = " + str(total_nfs_repayments))
+	frappe.msgprint("Repayments records balance: " + str(balance_amount) + " with total repayments = "
+		+ str(total_repayments) + " and total nfs repayments = " + str(total_nfs_repayments)
+		+ " on loan of " + str(loan.loan_amount))
 
 	# Insert rows starting balance_amount till it is 0
 	while(balance_amount > 0):

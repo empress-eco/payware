@@ -15,7 +15,9 @@ var redo_repayment_schedule = function(frm){
 	var doc = frm.doc;
 	frappe.call({
 		method: "payware.payware.utils.redo_repayment_schedule",
-		args: {loan_doc: doc.name},
+		args: {
+			loan_name: doc.name
+		},
 		callback: function(){
 			cur_frm.reload_doc();
 		}
