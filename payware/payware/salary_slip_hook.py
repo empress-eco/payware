@@ -14,7 +14,7 @@ def generate_component_in_salary_slip_update(doc, method):
 
 		for component in doc.earnings:
 			if str(component.salary_component).upper() == "BASIC":
-				base = component.amount
+				base = component.amount / doc.payment_days * doc.total_working_days
 				list.append(component)
 		if base == None:
 			frappe.msgprint("Basic Component not Found for " + str(doc.name))
