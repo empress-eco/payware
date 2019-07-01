@@ -142,19 +142,14 @@ def redo_repayment_schedule(loan_name):
 		frappe.throw("The loan is not submitted. Please Submit the loan and try again.")
 
 	# Identify pending schedule and remove those lines from schedule
-	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "skip", "total_payment", "payment_date"], filters={"parent": loan.name})
+	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "change_amount", "changed_principal_amount", "changed_interest_amount", "total_payment", "payment_date"], filters={"parent": loan.name})
 
 	payment_date = loan.repayment_start_date
 	row_balance_amount = loan.loan_amount
-	# Delete all non-paid and not-skipped records from schedule
+	# Delete all non-paid and not-change_amount records from schedule
 	for repayment_schedule in repayment_schedule_list:
-		# frappe.msgprint(str(repayment_schedule.payment_date) + " skip status = " + str(repayment_schedule.skip) + " amount " + str(repayment_schedule.principal_amount))
-		if (repayment_schedule.skip == 1):
-			frappe.set_value("Repayment Schedule", repayment_schedule.name, "principal_amount", 0)
-			frappe.set_value("Repayment Schedule", repayment_schedule.name, "interest_amount", 0)
-			frappe.set_value("Repayment Schedule", repayment_schedule.name, "total_payment", 0)
-			frappe.set_value("Repayment Schedule", repayment_schedule.name, "balance_loan_amount", 0)
-		if (repayment_schedule.paid == 0 and repayment_schedule.skip == 0):
+		# frappe.msgprint(str(repayment_schedule.payment_date) + " change_amount status = " + str(repayment_schedule.change_amount) + " amount " + str(repayment_schedule.principal_amount))
+		if (repayment_schedule.change_amount == 0 and repayment_schedule.change_amount == 0):
 			frappe.db.sql("""update `tabRepayment Schedule` set docstatus = 0 where name = %s""", repayment_schedule.name)
 			# frappe.msgprint("Repayment schedule being cleared for record: " + str(repayment_schedule.name))
 			frappe.delete_doc("Repayment Schedule", repayment_schedule.name)
@@ -167,7 +162,7 @@ def redo_repayment_schedule(loan_name):
 	#frappe.msgprint("Also finding total repayemnts made")
 	total_repayments = 0
 	last_payment_date = loan.repayment_start_date
-	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "paid", "skip", "total_payment", "payment_date"], filters={"parent": loan.name})
+	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date"], filters={"parent": loan.name, "paid": 1})
 	for repayment_schedule in repayment_schedule_list:
 		total_repayments += repayment_schedule.total_payment
 		last_payment_date = repayment_schedule.payment_date
@@ -201,15 +196,14 @@ def redo_repayment_schedule(loan_name):
 		total_payment = principal_amount + interest_amount
 
 		loan_repay_row = loan.append("repayment_schedule")
-		loan_repay_row.payment_date = payment_date
+		# Find out payment date that is next to be paid.
+		loan_repay_row.payment_date = 
 		loan_repay_row.principal_amount = principal_amount
 		loan_repay_row.interest_amount = interest_amount
 		loan_repay_row.total_payment = total_payment
 		loan_repay_row.balance_loan_amount = balance_amount
 
-		next_payment_date = add_months(payment_date, 1)
-
-		payment_date = next_payment_date
+		payment_date = add_months(payment_date, 1)
 	#frappe.msgprint("loan repayment schedule redone ended")
 	loan.save()
 
@@ -217,7 +211,7 @@ def redo_repayment_schedule(loan_name):
 def set_repayment_period(loan_docname):
 	loan = frappe.get_doc("Loan", str(loan_docname))
 	if loan.repayment_method == "Repay Fixed Amount per Period":
-		# Filter out the scheudles that are marked as skip
+		# No need to filter out the schedules that are marked as change_amount. Show it as a period that was part of loan repayment
 		loan.repayment_periods = len(loan.repayment_schedule)
 	loan.save()
 
@@ -295,37 +289,39 @@ def generate_additional_salary_records():
 	if additional_salary_list:
 		# frappe.msgprint("In the salary loop")
 		for additional_salary_doc in additional_salary_list:
-			cur_additional_salary_doc = frappe.get_doc("Additional Salary", additional_salary_doc.name)
 			#frappe.msgprint("New Additional Salary Doc loaded: ")
-			#frappe.msgprint(str(cur_additional_salary_doc.auto_repeat_end_date) + " auto repeat end date loaded.")
-			#frappe.msgprint(str(cur_additional_salary_doc.last_transaction_date) + " last transaction date loaded.")
-			#rappe.msgprint(str(cur_additional_salary_doc.auto_repeat_frequency) + " auto repeat frequency loaded.")
-			#cur_additional_salary_doc.last_transaction_date
-			if cur_additional_salary_doc.last_transaction_date == None:
-				#frappe.msgprint("Blank last transaction date found for " + cur_additional_salary_doc.name + ". Setting payroll date of original transaction")
-				cur_additional_salary_doc.last_transaction_date = cur_additional_salary_doc.payroll_date
-			if cur_additional_salary_doc.auto_repeat_frequency == "Weekly":
-				next_date = add_days(getdate(cur_additional_salary_doc.last_transaction_date), 7)
+			#frappe.msgprint(str(additional_salary_doc.auto_repeat_end_date) + " auto repeat end date loaded.")
+			#frappe.msgprint(str(additional_salary_doc.last_transaction_date) + " last transaction date loaded.")
+			#rappe.msgprint(str(additional_salary_doc.auto_repeat_frequency) + " auto repeat frequency loaded.")
+			#additional_salary_doc.last_transaction_date
+			if additional_salary_doc.last_transaction_date == None:
+				#frappe.msgprint("Blank last transaction date found for " + additional_salary_doc.name + ". Setting payroll date of original transaction")
+				additional_salary_doc.last_transaction_date = additional_salary_doc.payroll_date
+			if additional_salary_doc.last_transaction_amount == 0:
+				#frappe.msgprint("Blank last transaction date found for " + additional_salary_doc.name + ". Setting payroll date of original transaction")
+				additional_salary_doc.last_transaction_amount = additional_salary_doc.amount
+			if additional_salary_doc.auto_repeat_frequency == "Weekly":
+				next_date = add_days(getdate(additional_salary_doc.last_transaction_date), 7)
 			else:
 				# frappe.msgprint("auto_repeat_frequency must be Monthly or Annually")
-				frequency_factor = auto_repeat_frequency.get(cur_additional_salary_doc.auto_repeat_frequency, "Invalid frequency")
+				frequency_factor = auto_repeat_frequency.get(additional_salary_doc.auto_repeat_frequency, "Invalid frequency")
 				if frequency_factor == "Invalid frequency":
-					frappe.throw("Invalid frequency: {0} not found. Contact the developers!".format(cur_additional_salary_doc.auto_repeat_frequency))
-				next_date = add_months(getdate(cur_additional_salary_doc.last_transaction_date), frequency_factor)
+					frappe.throw("Invalid frequency: {0} not found. Contact the developers!".format(additional_salary_doc.auto_repeat_frequency))
+				next_date = add_months(getdate(additional_salary_doc.last_transaction_date), frequency_factor)
 			if next_date <= getdate(today_date):
-				#frappe.msgprint("New additional salary will be created for " + cur_additional_salary_doc.auto_repeat_frequency + " dated " + str(next_date))
+				#frappe.msgprint("New additional salary will be created for " + additional_salary_doc.auto_repeat_frequency + " dated " + str(next_date))
 				additional_salary = frappe.new_doc('Additional Salary')
-				additional_salary.employee = cur_additional_salary_doc.employee
+				additional_salary.employee = additional_salary_doc.employee
 				additional_salary.payroll_date = next_date
-				additional_salary.salary_component = cur_additional_salary_doc.salary_component
-				additional_salary.employee_name = cur_additional_salary_doc.employee_name
-				additional_salary.amount = cur_additional_salary_doc.last_transaction_amount
-				additional_salary.company = cur_additional_salary_doc.company
-				additional_salary.overwrite_salary_structure_amount = cur_additional_salary_doc.overwrite_salary_structure_amount
-				additional_salary.type = cur_additional_salary_doc.type
+				additional_salary.salary_component = additional_salary_doc.salary_component
+				additional_salary.employee_name = additional_salary_doc.employee_name
+				additional_salary.amount = additional_salary_doc.last_transaction_amount
+				additional_salary.company = additional_salary_doc.company
+				additional_salary.overwrite_salary_structure_amount = additional_salary_doc.overwrite_salary_structure_amount
+				additional_salary.type = additional_salary_doc.type
 				additional_salary.auto_repeat_frequency = "None"
-				additional_salary.auto_created_based_on = cur_additional_salary_doc.name
+				additional_salary.auto_created_based_on = additional_salary_doc.name
 				additional_salary.auto_repeat_end_date = None
 				additional_salary.last_transaction_date = None
 				additional_salary.save(ignore_permissions = True)
-				frappe.set_value("Additional Salary", cur_additional_salary_doc.name, "last_transaction_date", next_date)
+				frappe.set_value("Additional Salary", additional_salary_doc.name, "last_transaction_date", next_date)
