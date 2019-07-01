@@ -161,13 +161,9 @@ def redo_repayment_schedule(loan_name):
 	# Also Find next payment date, set the first date as repayment start date in case the repayments are not paid yet.
 	#frappe.msgprint("Also finding total repayemnts made")
 	total_repayments = 0
-	last_payment_date = loan.repayment_start_date
-	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date"], filters={"parent": loan.name, "paid": 1})
-	for repayment_schedule in repayment_schedule_list:
+	paid_repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date"], filters={"parent": loan.name, "paid": 1})
+	for repayment_schedule in paid_repayment_schedule_list:
 		total_repayments += repayment_schedule.total_payment
-		last_payment_date = repayment_schedule.payment_date
-	if (payment_date != last_payment_date):
-		payment_date = add_months(last_payment_date, 1)
 
 	# Find total of NFS repayments made
 	#frappe.msgprint("finding total repayemnts made")
@@ -182,26 +178,38 @@ def redo_repayment_schedule(loan_name):
 		+ str(total_repayments) + " and total nfs repayments = " + str(total_nfs_repayments)
 		+ " on loan of " + str(loan.loan_amount))
 
-	# Insert rows starting balance_amount till it is 0
-	while(balance_amount > 0):
-		#frappe.msgprint("Creating repayments records with balance: " + str(balance_amount))
-		interest_amount = rounded(balance_amount * flt(loan.rate_of_interest) / (12 * 100))
-		principal_amount = loan.monthly_repayment_amount - interest_amount
-		balance_amount = rounded(balance_amount + interest_amount - loan.monthly_repayment_amount)
+	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date"], filters={"parent": loan.name, "paid": 1})
 
-		if balance_amount < 0:
-			principal_amount += balance_amount
-			balance_amount = 0.0
+	next_payment_date = loan.repayment_start_date
+	for repayment_schedule in repayment_schedule_list
+		# Insert rows starting balance_amount till it is 0
+		if repayment_schedule.payment_date == next_payment_date:
+			if repayment_schedule.change_amount = 1:
+				frappe.set_value("Repayment Schedule", repayment_schedule.name, "principal_amount", repayment_schedule.changed_principal_amount)
+				frappe.set_value("Repayment Schedule", repayment_schedule.name, "interest_amount", repayment_schedule.changed_interest_amount)
+				frappe.set_value("Repayment Schedule", repayment_schedule.name, "total_payment", repayment_schedule.changed_principal_amount +  repayment_schedule.changed_interest_amount)
+				frappe.set_value("Repayment Schedule", repayment_schedule.name, "balance_loan_amount", repayment_schedule.changed_principal_amount +  repayment_schedule.changed_interest_amount)
 
-		total_payment = principal_amount + interest_amount
+		else:
+		while(balance_amount > 0):
+			#frappe.msgprint("Creating repayments records with balance: " + str(balance_amount))
+			interest_amount = rounded(balance_amount * flt(loan.rate_of_interest) / (12 * 100))
+			principal_amount = loan.monthly_repayment_amount - interest_amount
+			balance_amount = rounded(balance_amount + interest_amount - loan.monthly_repayment_amount)
 
-		loan_repay_row = loan.append("repayment_schedule")
-		# Find out payment date that is next to be paid.
-		loan_repay_row.payment_date = 
-		loan_repay_row.principal_amount = principal_amount
-		loan_repay_row.interest_amount = interest_amount
-		loan_repay_row.total_payment = total_payment
-		loan_repay_row.balance_loan_amount = balance_amount
+			if balance_amount < 0:
+				principal_amount += balance_amount
+				balance_amount = 0.0
+
+			total_payment = principal_amount + interest_amount
+
+			loan_repay_row = loan.append("repayment_schedule")
+			# Find out payment date that is next to be paid.
+			loan_repay_row.payment_date = 
+			loan_repay_row.principal_amount = principal_amount
+			loan_repay_row.interest_amount = interest_amount
+			loan_repay_row.total_payment = total_payment
+			loan_repay_row.balance_loan_amount = balance_amount
 
 		payment_date = add_months(payment_date, 1)
 	#frappe.msgprint("loan repayment schedule redone ended")
@@ -308,7 +316,8 @@ def generate_additional_salary_records():
 				if frequency_factor == "Invalid frequency":
 					frappe.throw("Invalid frequency: {0} not found. Contact the developers!".format(additional_salary_doc.auto_repeat_frequency))
 				next_date = add_months(getdate(additional_salary_doc.last_transaction_date), frequency_factor)
-			if next_date <= getdate(today_date):
+			# Create 13 days in advance - specificlaly to allow mid salary advance.
+			if next_date <= add_days(getdate(today_date), 13):
 				#frappe.msgprint("New additional salary will be created for " + additional_salary_doc.auto_repeat_frequency + " dated " + str(next_date))
 				additional_salary = frappe.new_doc('Additional Salary')
 				additional_salary.employee = additional_salary_doc.employee
