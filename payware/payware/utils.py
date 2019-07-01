@@ -179,18 +179,19 @@ def redo_repayment_schedule(loan_name):
 		+ " on loan of " + str(loan.loan_amount))
 
 	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date"], filters={"parent": loan.name, "paid": 1})
+	repayment_schedule_list.sort()
 
 	next_payment_date = loan.repayment_start_date
-	for repayment_schedule in repayment_schedule_list
+	for repayment_schedule in repayment_schedule_list:
 		# Insert rows starting balance_amount till it is 0
 		if repayment_schedule.payment_date == next_payment_date:
-			if repayment_schedule.change_amount = 1:
+			if repayment_schedule.change_amount == 1:
 				frappe.set_value("Repayment Schedule", repayment_schedule.name, "principal_amount", repayment_schedule.changed_principal_amount)
 				frappe.set_value("Repayment Schedule", repayment_schedule.name, "interest_amount", repayment_schedule.changed_interest_amount)
 				frappe.set_value("Repayment Schedule", repayment_schedule.name, "total_payment", repayment_schedule.changed_principal_amount +  repayment_schedule.changed_interest_amount)
 				frappe.set_value("Repayment Schedule", repayment_schedule.name, "balance_loan_amount", repayment_schedule.changed_principal_amount +  repayment_schedule.changed_interest_amount)
-
 		else:
+				frappe.msgprint("Else clause of payment date hit")
 		while(balance_amount > 0):
 			#frappe.msgprint("Creating repayments records with balance: " + str(balance_amount))
 			interest_amount = rounded(balance_amount * flt(loan.rate_of_interest) / (12 * 100))
@@ -205,7 +206,7 @@ def redo_repayment_schedule(loan_name):
 
 			loan_repay_row = loan.append("repayment_schedule")
 			# Find out payment date that is next to be paid.
-			loan_repay_row.payment_date = 
+			loan_repay_row.payment_date = next_payment_date
 			loan_repay_row.principal_amount = principal_amount
 			loan_repay_row.interest_amount = interest_amount
 			loan_repay_row.total_payment = total_payment
@@ -292,21 +293,22 @@ def generate_additional_salary_records():
 		"Monthly": 1,
 		"Annually": 12
 	}
-	additional_salary_list = frappe.get_all("Additional Salary", filters={"docstatus": "1", "auto_repeat_frequency": ("!=", "None"), "auto_repeat_frequency": ("!=", ""), "auto_repeat_end_date": ("!=", ""), "auto_repeat_end_date": (">=", today_date)}, fields="name")
+	additional_salary_list = frappe.get_all("Additional Salary", filters={"docstatus": "1", "auto_repeat_frequency": ("!=", "None"), "auto_repeat_end_date": ("!=", ""), "auto_repeat_end_date": (">=", today_date)}, fields={"name", "auto_repeat_end_date", "last_transaction_date", "last_transaction_amount", "auto_repeat_frequency", "payroll_date", "employee", "salary_component", "employee_name", "type", "overwrite_salary_structure_amount", "amount"})
 	# frappe.msgprint("Additional Salary List lookedup: " + str(additional_salary_list))
 	if additional_salary_list:
 		# frappe.msgprint("In the salary loop")
 		for additional_salary_doc in additional_salary_list:
 			#frappe.msgprint("New Additional Salary Doc loaded: ")
-			#frappe.msgprint(str(additional_salary_doc.auto_repeat_end_date) + " auto repeat end date loaded.")
-			#frappe.msgprint(str(additional_salary_doc.last_transaction_date) + " last transaction date loaded.")
-			#rappe.msgprint(str(additional_salary_doc.auto_repeat_frequency) + " auto repeat frequency loaded.")
+			# frappe.msgprint(str(additional_salary_doc.name) + " auto repeat additional salary loaded.")
+			# frappe.msgprint(str(additional_salary_doc.auto_repeat_end_date) + " auto repeat end date loaded.")
+			# frappe.msgprint(str(additional_salary_doc.last_transaction_date) + " last transaction date loaded.")
+			# frappe.msgprint(str(additional_salary_doc.auto_repeat_frequency) + " auto repeat frequency loaded.")
 			#additional_salary_doc.last_transaction_date
 			if additional_salary_doc.last_transaction_date == None:
 				#frappe.msgprint("Blank last transaction date found for " + additional_salary_doc.name + ". Setting payroll date of original transaction")
 				additional_salary_doc.last_transaction_date = additional_salary_doc.payroll_date
 			if additional_salary_doc.last_transaction_amount == 0:
-				#frappe.msgprint("Blank last transaction date found for " + additional_salary_doc.name + ". Setting payroll date of original transaction")
+				# frappe.msgprint("Blank last transaction amount found " + str(additional_salary_doc.last_transaction_amount) + ". Setting amount of original transaction: " + str(additional_salary_doc.amount))
 				additional_salary_doc.last_transaction_amount = additional_salary_doc.amount
 			if additional_salary_doc.auto_repeat_frequency == "Weekly":
 				next_date = add_days(getdate(additional_salary_doc.last_transaction_date), 7)
@@ -314,11 +316,10 @@ def generate_additional_salary_records():
 				# frappe.msgprint("auto_repeat_frequency must be Monthly or Annually")
 				frequency_factor = auto_repeat_frequency.get(additional_salary_doc.auto_repeat_frequency, "Invalid frequency")
 				if frequency_factor == "Invalid frequency":
-					frappe.throw("Invalid frequency: {0} not found. Contact the developers!".format(additional_salary_doc.auto_repeat_frequency))
+					frappe.throw("Invalid frequency: {0} for {1} not found. Contact the developers!".format(additional_salary_doc.auto_repeat_frequency, additional_salary_doc.name))
 				next_date = add_months(getdate(additional_salary_doc.last_transaction_date), frequency_factor)
 			# Create 13 days in advance - specificlaly to allow mid salary advance.
 			if next_date <= add_days(getdate(today_date), 13):
-				#frappe.msgprint("New additional salary will be created for " + additional_salary_doc.auto_repeat_frequency + " dated " + str(next_date))
 				additional_salary = frappe.new_doc('Additional Salary')
 				additional_salary.employee = additional_salary_doc.employee
 				additional_salary.payroll_date = next_date
@@ -334,3 +335,4 @@ def generate_additional_salary_records():
 				additional_salary.last_transaction_date = None
 				additional_salary.save(ignore_permissions = True)
 				frappe.set_value("Additional Salary", additional_salary_doc.name, "last_transaction_date", next_date)
+				frappe.msgprint("New additional salary created for " + additional_salary_doc.auto_repeat_frequency + " dated " + str(next_date))
