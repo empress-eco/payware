@@ -149,70 +149,76 @@ def redo_repayment_schedule(loan_name):
 	# Delete all non-paid and not-change_amount records from schedule
 	for repayment_schedule in repayment_schedule_list:
 		# frappe.msgprint(str(repayment_schedule.payment_date) + " change_amount status = " + str(repayment_schedule.change_amount) + " amount " + str(repayment_schedule.principal_amount))
-		if (repayment_schedule.change_amount == 0 and repayment_schedule.change_amount == 0):
+		if (not repayment_schedule.paid and not repayment_schedule.change_amount):
 			frappe.db.sql("""update `tabRepayment Schedule` set docstatus = 0 where name = %s""", repayment_schedule.name)
 			# frappe.msgprint("Repayment schedule being cleared for record: " + str(repayment_schedule.name))
 			frappe.delete_doc("Repayment Schedule", repayment_schedule.name)
 
-	# Reload the loan doc after deleting records
+	# Reload the loan doc after deleting records fur futher use
 	loan = frappe.get_doc("Loan", str(loan_name))
 
 	# Find total of repayments made
 	# Also Find next payment date, set the first date as repayment start date in case the repayments are not paid yet.
 	#frappe.msgprint("Also finding total repayemnts made")
-	total_repayments = 0
+	total_repayments_made = 0
 	paid_repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date"], filters={"parent": loan.name, "paid": 1})
 	for repayment_schedule in paid_repayment_schedule_list:
-		total_repayments += repayment_schedule.total_payment
+		total_repayments_made += repayment_schedule.total_payment
 
 	# Find total of NFS repayments made
 	#frappe.msgprint("finding total repayemnts made")
-	total_nfs_repayments = 0
+	total_nfs_repayments_made = 0
 	nfs_repayment_schedule_list = frappe.get_all("Loan NFS Repayments", fields=["parent", "payment_amount"], filters={"parent": loan.name, "docstatus": 1})
 	for nfs_repayment_schedule in nfs_repayment_schedule_list:
-		total_nfs_repayments += nfs_repayment_schedule.payment_amount
+		total_nfs_repayments_made += nfs_repayment_schedule.payment_amount
 
 	# Find new balance_amount
-	balance_amount = loan.loan_amount - total_repayments - total_nfs_repayments
-	frappe.msgprint("Repayments records balance: " + str(balance_amount) + " with total repayments = "
-		+ str(total_repayments) + " and total nfs repayments = " + str(total_nfs_repayments)
-		+ " on loan of " + str(loan.loan_amount))
+	balance_amount = loan.loan_amount - (total_repayments_made + total_nfs_repayments_made)
+	# frappe.msgprint("Repayments records balance: " + str(balance_amount) + " with total repayments = "
+		# + str(total_repayments_made) + " and total nfs repayments = " + str(total_nfs_repayments_made)
+		# + " on loan of " + str(loan.loan_amount))
 
-	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date"], filters={"parent": loan.name, "paid": 1})
+	repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date", "change_amount", "changed_principal_amount", "changed_interest_amount", "balance_loan_amount"], filters={"parent": loan.name, "paid": 1})
 	repayment_schedule_list.sort()
 
 	next_payment_date = loan.repayment_start_date
+	balance_amount = loan.loan_amount
 	for repayment_schedule in repayment_schedule_list:
 		# Insert rows starting balance_amount till it is 0
 		if repayment_schedule.payment_date == next_payment_date:
 			if repayment_schedule.change_amount == 1:
+				frappe.msgprint("Setting values for changed amounts for " + str(repayment_schedule.payment_date))
 				frappe.set_value("Repayment Schedule", repayment_schedule.name, "principal_amount", repayment_schedule.changed_principal_amount)
 				frappe.set_value("Repayment Schedule", repayment_schedule.name, "interest_amount", repayment_schedule.changed_interest_amount)
 				frappe.set_value("Repayment Schedule", repayment_schedule.name, "total_payment", repayment_schedule.changed_principal_amount +  repayment_schedule.changed_interest_amount)
-				frappe.set_value("Repayment Schedule", repayment_schedule.name, "balance_loan_amount", repayment_schedule.changed_principal_amount +  repayment_schedule.changed_interest_amount)
+				frappe.set_value("Repayment Schedule", repayment_schedule.name, "balance_loan_amount", balance_amount  - repayment_schedule.total_payment)
+			balance_amount -= repayment_schedule.total_payment
 		else:
-				frappe.msgprint("Else clause of payment date hit")
-		while(balance_amount > 0):
-			#frappe.msgprint("Creating repayments records with balance: " + str(balance_amount))
-			interest_amount = rounded(balance_amount * flt(loan.rate_of_interest) / (12 * 100))
-			principal_amount = loan.monthly_repayment_amount - interest_amount
-			balance_amount = rounded(balance_amount + interest_amount - loan.monthly_repayment_amount)
+			frappe.msgprint("Else clause of payment date hit, will be creating records for " + str(next_payment_date))
+			continue
+			while(balance_amount > 0):
+				#frappe.msgprint("Creating repayments records with balance: " + str(balance_amount))
+				interest_amount = rounded(balance_amount * flt(loan.rate_of_interest) / (12 * 100))
+				principal_amount = loan.monthly_repayment_amount - interest_amount
+				balance_amount = rounded(balance_amount + interest_amount - loan.monthly_repayment_amount)
 
-			if balance_amount < 0:
-				principal_amount += balance_amount
-				balance_amount = 0.0
+				if balance_amount < 0:
+					principal_amount += balance_amount
+					balance_amount = 0.0
 
-			total_payment = principal_amount + interest_amount
+				total_payment = principal_amount + interest_amount
+				frappe.msgprint("Total payment now is " + str(total_payment) + " and balance amount is " + str(balance_amount))
 
-			loan_repay_row = loan.append("repayment_schedule")
-			# Find out payment date that is next to be paid.
-			loan_repay_row.payment_date = next_payment_date
-			loan_repay_row.principal_amount = principal_amount
-			loan_repay_row.interest_amount = interest_amount
-			loan_repay_row.total_payment = total_payment
-			loan_repay_row.balance_loan_amount = balance_amount
+				# loan_repay_row = loan.append("repayment_schedule")
+				# # Find out payment date that is next to be paid.
+				# loan_repay_row.payment_date = next_payment_date
+				# loan_repay_row.principal_amount = principal_amount
+				# loan_repay_row.interest_amount = interest_amount
+				# loan_repay_row.total_payment = total_payment
+				# loan_repay_row.balance_loan_amount = balance_amount
+				# loan_repay_row.docstatus = 1
 
-		payment_date = add_months(payment_date, 1)
+				payment_date = add_months(payment_date, 1)
 	#frappe.msgprint("loan repayment schedule redone ended")
 	loan.save()
 
@@ -244,7 +250,7 @@ def create_additional_salary_journal(doc, method):
 		salary_component = frappe.get_doc("Salary Component", doc.salary_component)
 		cash_account = frappe.db.get_single_value("Payware Settings", "default_account_for_additional_component_cash_journal")
 		component_account = frappe.db.get_value("Salary Component Account", {"parent": doc.salary_component, "company": doc.company}, "default_account")
-		frappe.msgprint("Expense account is: " + str(component_account))
+		# frappe.msgprint("Expense account is: " + str(component_account))
 		if method == "on_submit":
 			dr_account = component_account
 			cr_account = cash_account
@@ -319,6 +325,7 @@ def generate_additional_salary_records():
 					frappe.throw("Invalid frequency: {0} for {1} not found. Contact the developers!".format(additional_salary_doc.auto_repeat_frequency, additional_salary_doc.name))
 				next_date = add_months(getdate(additional_salary_doc.last_transaction_date), frequency_factor)
 			# Create 13 days in advance - specificlaly to allow mid salary advance.
+			# frappe.msgprint("next date" + str(next_date) + " todays date string " + str(add_days(getdate(today_date), 13)))
 			if next_date <= add_days(getdate(today_date), 13):
 				additional_salary = frappe.new_doc('Additional Salary')
 				additional_salary.employee = additional_salary_doc.employee
