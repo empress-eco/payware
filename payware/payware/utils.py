@@ -173,15 +173,14 @@ def redo_repayment_schedule(loan_name):
 
 	# Find new balance_amount
 	balance_amount = loan.loan_amount - (total_repayments_made + total_nfs_repayments_made)
-	# frappe.msgprint("Repayments records balance: " + str(balance_amount) + " with total repayments = "
-	# 	+ str(total_repayments_made) + " and total nfs repayments = " + str(total_nfs_repayments_made)
-	# 	+ " on loan of " + str(loan.loan_amount))
+	frappe.msgprint("Repayments records balance: " + str(balance_amount) + " with total repayments = "
+		+ str(total_repayments_made) + " and total nfs repayments = " + str(total_nfs_repayments_made)
+		+ " on loan of " + str(loan.loan_amount))
 
 	repayment_schedule_list = frappe.get_list("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date", "change_amount", "changed_principal_amount", "changed_interest_amount", "balance_loan_amount"], filters={"parent": loan.name})
 	repayment_schedule_list = sorted(repayment_schedule_list, key=lambda k: k['payment_date'])
 
 	next_payment_date = loan.repayment_start_date
-	balance_amount = loan.loan_amount
 	# frappe.msgprint("The number of existing records in the repayment scheudule is " + str(len(repayment_schedule_list)))
 	idx = 1
 	for repayment_schedule in repayment_schedule_list:
@@ -196,7 +195,7 @@ def redo_repayment_schedule(loan_name):
 				#frappe.msgprint("Creating repayments records with balance: " + str(balance_amount))
 				interest_amount = rounded(balance_amount * flt(loan.rate_of_interest) / (12 * 100))
 				principal_amount = loan.monthly_repayment_amount - interest_amount
-				balance_amount = rounded(balance_amount + interest_amount - loan.monthly_repayment_amount)
+				balance_amount = balance_amount + interest_amount - loan.monthly_repayment_amount
 
 				if balance_amount < 0:
 					principal_amount += balance_amount
