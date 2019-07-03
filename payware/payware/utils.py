@@ -122,7 +122,7 @@ def create_loan_repayment_jv(doc, method):
 	# Update loan of Repayment Schedule child doctype of Loan doctype and set the balances right as per date
 	redo_repayment_schedule(loan.name)
 	set_repayment_period(loan.name)
-	calculate_totals(loan.name, payment_amount)
+	calculate_totals(loan.name)
 
 	if method == "on_submit":
 		frappe.set_value(doc.doctype, doc.name, "journal_name", journal_entry.name)
@@ -177,7 +177,7 @@ def redo_repayment_schedule(loan_name):
 		+ str(total_repayments_made) + " and total nfs repayments = " + str(total_nfs_repayments_made)
 		+ " on loan of " + str(loan.loan_amount))
 
-	repayment_schedule_list = frappe.get_list("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date", "change_amount", "changed_principal_amount", "changed_interest_amount", "balance_loan_amount"], filters={"parent": loan.name})
+	repayment_schedule_list = frappe.get_list("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date", "change_amount", "changed_principal_amount", "changed_interest_amount", "balance_loan_amount", "paid"], filters={"parent": loan.name})
 	repayment_schedule_list = sorted(repayment_schedule_list, key=lambda k: k['payment_date'])
 
 	next_payment_date = loan.repayment_start_date
@@ -228,8 +228,10 @@ def redo_repayment_schedule(loan_name):
 			frappe.set_value("Repayment Schedule", repayment_schedule.name, "interest_amount", repayment_schedule.changed_interest_amount)
 			frappe.set_value("Repayment Schedule", repayment_schedule.name, "total_payment", total_payment)
 			frappe.set_value("Repayment Schedule", repayment_schedule.name, "balance_loan_amount", (balance_amount - total_payment))
+		if repayment_schedule.paid:
+			total_payment = repayment_schedule.total_payment
 		idx += 1
-		# Reload loan doc again after setting values
+		# Reload loan doc again after inserting and/or setting values
 		loan = frappe.get_doc("Loan", str(loan_name))
 
 		# Now the repayment_schedule.payment_date == next_payment_date meaning gaps have been filled
@@ -289,7 +291,8 @@ def calculate_totals(loan_docname, nfs_repayments_made=0):
 		if data.paid:
 			loan.total_amount_paid += data.total_payment
 	# Add nfs repayments to the total amount paid
-	loan.total_amount_paid += nfs_repayments_made
+	loan.total_nsf_repayments = nfs_repayments_made
+	# frappe.msgprint("nfs_repayments_made set value to " + str(nfs_repayments_made) + " and set the total amoutn paid to " + str(loan.total_amount_paid))
 	loan.save()
 
 @frappe.whitelist()
