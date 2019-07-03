@@ -122,7 +122,7 @@ def create_loan_repayment_jv(doc, method):
 	# Update loan of Repayment Schedule child doctype of Loan doctype and set the balances right as per date
 	redo_repayment_schedule(loan.name)
 	set_repayment_period(loan.name)
-	calculate_totals(loan.name)
+	calculate_totals(loan.name, payment_amount)
 
 	if method == "on_submit":
 		frappe.set_value(doc.doctype, doc.name, "journal_name", journal_entry.name)
@@ -264,6 +264,8 @@ def redo_repayment_schedule(loan_name):
 		idx += 1
 
 	loan.save()
+	calculate_totals(loan.name, total_nfs_repayments_made)
+
 
 	frappe.msgprint("Loan repayment schedule redone. Created " + str(idx - 1) + " records!")
 
@@ -276,7 +278,7 @@ def set_repayment_period(loan_docname):
 	loan.save()
 
 @frappe.whitelist()
-def calculate_totals(loan_docname):
+def calculate_totals(loan_docname, nfs_repayments_made=0):
 	loan = frappe.get_doc("Loan", loan_docname)
 	loan.total_payment = 0
 	loan.total_interest_payable = 0
@@ -286,6 +288,8 @@ def calculate_totals(loan_docname):
 		loan.total_interest_payable +=data.interest_amount
 		if data.paid:
 			loan.total_amount_paid += data.total_payment
+	# Add nfs repayments to the total amount paid
+	loan.total_amount_paid += nfs_repayments_made
 	loan.save()
 
 @frappe.whitelist()
