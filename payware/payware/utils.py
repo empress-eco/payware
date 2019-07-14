@@ -296,7 +296,7 @@ def calculate_totals(loan_docname, nfs_repayments_made=0):
 	# Add nfs repayments to the total amount paid
 	loan.total_nsf_repayments = nfs_repayments_made
 	# frappe.msgprint("nfs_repayments_made set value to " + str(nfs_repayments_made) + " and set the total amoutn paid to " + str(loan.total_amount_paid))
-	if (loan.loan_amount < loan.total_payment + loan.total_nfs_repayments_made):
+	if (loan.loan_amount < (loan.total_payment + loan.total_nfs_repayments_made):
 		frappe.throw("Total repayments exceeds total payment. Please check the repayment amounts.")
 	loan.save()
 
