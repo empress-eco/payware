@@ -132,6 +132,10 @@ def create_loan_repayment_jv(doc, method):
 	frappe.msgprint(msg_to_print)
 
 @frappe.whitelist()
+def validate_loan_repayment_nfs(doc, method):
+	if method == "validate":
+
+@frappe.whitelist()
 def redo_repayment_schedule(loan_name):
 	#frappe.msgprint("This is the parameter passed: " + str(loan_name))
 	loan = frappe.get_doc("Loan", str(loan_name))
@@ -177,8 +181,7 @@ def redo_repayment_schedule(loan_name):
 		+ str(total_repayments_made) + " and total nfs repayments = " + str(total_nfs_repayments_made)
 		+ " on loan of " + str(loan.loan_amount))
 
-	repayment_schedule_list = frappe.get_list("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date", "change_amount", "changed_principal_amount", "changed_interest_amount", "balance_loan_amount", "paid"], filters={"parent": loan.name})
-	repayment_schedule_list = sorted(repayment_schedule_list, key=lambda k: k['payment_date'])
+	repayment_schedule_list = frappe.get_list("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date", "change_amount", "changed_principal_amount", "changed_interest_amount", "balance_loan_amount", "paid"], filters={"parent": loan.name}, order_by="payment_date")
 
 	next_payment_date = loan.repayment_start_date
 	# frappe.msgprint("The number of existing records in the repayment scheudule is " + str(len(repayment_schedule_list)))
@@ -293,6 +296,8 @@ def calculate_totals(loan_docname, nfs_repayments_made=0):
 	# Add nfs repayments to the total amount paid
 	loan.total_nsf_repayments = nfs_repayments_made
 	# frappe.msgprint("nfs_repayments_made set value to " + str(nfs_repayments_made) + " and set the total amoutn paid to " + str(loan.total_amount_paid))
+	if (loan.loan_amount < loan.total_payment + loan.total_nfs_repayments_made):
+		frappe.throw("Total repayments exceeds total payment. Please check the repayment amounts.")
 	loan.save()
 
 @frappe.whitelist()

@@ -2,7 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Loan Repayment Not From Salary', {
-	refresh: function(frm) {
-
+	onload: function(frm) {
+		frm.set_query("loan", function() {
+			return {
+				filters: {
+					status: "Disbursed",
+					docstatus: 1
+				}
+			}
+		})
 	}
 });

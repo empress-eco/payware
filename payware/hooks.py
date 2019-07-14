@@ -89,7 +89,8 @@ fixtures = [
 
 doc_events = {
 	"Loan": {
-		"on_submit": "payware.payware.utils.create_disbursement_journal_entry"
+		"on_submit": "payware.payware.utils.create_disbursement_journal_entry",
+		"validate": "payware.payware.utils.validate_loan"
 	},
 	"Salary Slip": {
 		"on_submit": "payware.payware.utils.set_loan_paid",
@@ -99,6 +100,7 @@ doc_events = {
 	},
 	"Loan Repayment Not From Salary": {
 		"on_submit": "payware.payware.utils.create_loan_repayment_jv",
+		"validate": "payware.payware.utils.validate_loan_repayment_nfs",
 		"on_cancel": "payware.payware.utils.create_loan_repayment_jv"
 	},
 	"Additional Salary": {
