@@ -132,8 +132,37 @@ def create_loan_repayment_jv(doc, method):
 	frappe.msgprint(msg_to_print)
 
 @frappe.whitelist()
+def validate_loan(doc, method):
+	if method == "validate":
+		# Check if the loan selected is submitted
+		loan = frappe.get_doc("Loan", str(doc.loan))
+		#frappe.msgprint("This is the loan object: " + str(loan.name))
+		#frappe.msgprint("This is the repayment schedule length: " + str(len(loan.repayment_schedule)))
+		# Only matters if the loan is submitted and if there are payroll entry in process
+		if (loan.docstatus == 1):
+			# Check draft/submitted payroll entry that is matching the nfs repayment payment_date
+			# frappe.msgprint("Validate fired!")
+			payroll_entry_list = frappe.get_list("Payroll Entry", fields=["name"] , \
+				filters={"start_date": ("<=", doc.payment_date), "end_date": (">=", doc.payment_date), "docstatus": ("!=", 2)})
+			if payroll_entry_list:
+				frappe.throw("Payroll entry exists for date " + str(doc.payment_date) + ". Use another payment date. Please contact the system administrator for more details.")
+
+@frappe.whitelist()
 def validate_loan_repayment_nfs(doc, method):
 	if method == "validate":
+		# Check if the loan selected is submitted
+		loan = frappe.get_doc("Loan", str(doc.loan))
+		#frappe.msgprint("This is the loan object: " + str(loan.name))
+		#frappe.msgprint("This is the repayment schedule length: " + str(len(loan.repayment_schedule)))
+		if (loan.docstatus != 1):
+			frappe.throw("The loan is not submitted. Please Submit the loan and try again.")
+		
+		# Check draft/submitted payroll entry that is matching the nfs repayment payment_date
+		# frappe.msgprint("Validate fired!")
+		payroll_entry_list = frappe.get_list("Payroll Entry", fields=["name"] , \
+			filters={"start_date": ("<=", doc.payment_date), "end_date": (">=", doc.payment_date), "docstatus": ("!=", 2)})
+		if payroll_entry_list:
+			frappe.throw("Payroll entry exists for date " + str(doc.payment_date) + ". Use another payment date. Please contact the system administrator for more details.")
 
 @frappe.whitelist()
 def redo_repayment_schedule(loan_name):
@@ -296,7 +325,7 @@ def calculate_totals(loan_docname, nfs_repayments_made=0):
 	# Add nfs repayments to the total amount paid
 	loan.total_nsf_repayments = nfs_repayments_made
 	# frappe.msgprint("nfs_repayments_made set value to " + str(nfs_repayments_made) + " and set the total amoutn paid to " + str(loan.total_amount_paid))
-	if (loan.loan_amount < (loan.total_payment + loan.total_nfs_repayments_made):
+	if (loan.loan_amount < (loan.total_payment + loan.total_nfs_repayments_made)):
 		frappe.throw("Total repayments exceeds total payment. Please check the repayment amounts.")
 	loan.save()
 
