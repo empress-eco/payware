@@ -57,6 +57,12 @@ def get_data():
 					"doctype": "Salary Slip",
 					"is_query_report": True,
 				},
+				{
+					"type": "report",
+					"name": "ITX 300.01.E - Employment Taxes Payment Credit Slip",
+					"doctype": "Salary Slip",
+					"is_query_report": True,
+				},
 			]
 		},
 		{

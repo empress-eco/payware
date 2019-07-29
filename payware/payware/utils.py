@@ -135,17 +135,18 @@ def create_loan_repayment_jv(doc, method):
 def validate_loan(doc, method):
 	if method == "validate":
 		# Check if the loan selected is submitted
-		loan = frappe.get_doc("Loan", str(doc.loan))
+		if (doc.loan):
+			loan = frappe.get_doc("Loans", str(doc.loan))
 		#frappe.msgprint("This is the loan object: " + str(loan.name))
 		#frappe.msgprint("This is the repayment schedule length: " + str(len(loan.repayment_schedule)))
 		# Only matters if the loan is submitted and if there are payroll entry in process
-		if (loan.docstatus == 1):
+			if (loan.docstatus == 1):
 			# Check draft/submitted payroll entry that is matching the nfs repayment payment_date
 			# frappe.msgprint("Validate fired!")
-			payroll_entry_list = frappe.get_list("Payroll Entry", fields=["name"] , \
-				filters={"start_date": ("<=", doc.payment_date), "end_date": (">=", doc.payment_date), "docstatus": ("!=", 2)})
-			if payroll_entry_list:
-				frappe.throw("Payroll entry exists for date " + str(doc.payment_date) + ". Use another payment date. Please contact the system administrator for more details.")
+				payroll_entry_list = frappe.get_list("Payroll Entry", fields=["name"] , \
+					filters={"start_date": ("<=", doc.payment_date), "end_date": (">=", doc.payment_date), "docstatus": ("!=", 2)})
+				if payroll_entry_list:
+					frappe.throw("Payroll entry exists for date " + str(doc.payment_date) + ". Use another payment date. Please contact the system administrator for more details.")
 
 @frappe.whitelist()
 def validate_loan_repayment_nfs(doc, method):
