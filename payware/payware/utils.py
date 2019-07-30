@@ -18,7 +18,11 @@ def create_disbursement_journal_entry(doc, method):
 	journal_entry.user_remark = _('Payment of {0} disbursed on {1} starting from {2}')\
 		.format(doc.name, doc.disbursement_date, doc.repayment_start_date)
 	journal_entry.company = doc.company
-	journal_entry.posting_date = doc.disbursement_date
+	# If loan is from application than disbursement date is not set the use posting date.
+	if (doc.disbursement_date):
+		journal_entry.posting_date = doc.disbursement_date
+	else:
+		journal_entry.posting_date = doc.posting_date
 
 	payment_amount = flt(doc.loan_amount, precision)
 
