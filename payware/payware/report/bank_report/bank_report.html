@@ -1,11 +1,10 @@
 <style>
 .print-format {
-        padding-left: 10mm;
-        padding-right: 5mm;
+        padding-left: 15mm !important;;
+        padding-right: 15mm !important;;
         padding-top: 0mm;
 		font-size: 10pt;	
 }
-
 .print-format td, .print-format th {
     vertical-align: top !important;
     padding: 3px !important;
@@ -13,8 +12,8 @@
 
 @media screen {
 	.print-format {
-		padding-left: 10mm;
-        padding-right: 5mm;
+		padding-left: 15mm !important;;
+        padding-right: 15mm !important;;
         padding-top: 0mm;
 		font-size: 10pt;
 		width: 8.5in;
@@ -30,63 +29,67 @@
 
 {%	
 	var from_date = filters.from_date; 
-	var to_date = filters.to_date; 		
+	var to_date = filters.to_date;
+	var total_rows = data.length - 1;
+	var total_net_pay = data[1][ __("Net Pay")];
+	var total_net_pay_word = frappe.utils.money_in_words(total_net_pay);
 %}
-{%	var year = from_date[0] + from_date[1] + from_date[2] + from_date[3] %}
-
 
 <br><br><br><br><br><br><br><br><br><br>
 
-Ref. No. {%= data[i][ __("Payroll Entry")] %}
-<r>Date: {%= to_date %}</r>
+<P ALIGN=LEFT>Ref. No. {%= data[0][ __("Payroll Entry")] %}</P>
+<P ALIGN=RIGHT>Date: {%= to_date %}</P>
+<P ALIGN=LEFT>
+To,<br>
+Branch Manager,<br>
+Diamond Trust Bank (T) Limited,<br>
+Kariakoo, Msimbazi Street,<br>
+Dar-Es-Salaam, Tanzania.<br>
+<br>
+Dear Sir,<br><br>
 
-To,
-Branch Manager,
-Diamond Trust Bank (T) Limited,
-Kariakoo, Msimbazi Street,
-Dar-Es-Salaam, Tanzania.
+Sub: Credit of Salaries of Employees to their respective Saving Accounts for the month of May 2019<br><br>
 
-Dear Sir,
-
-Sub: Credit of Salaries of Employees to their respective Saving Accounts for the month of May 2019
-
-Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the {%= data[data.length][ __("Net Pay")] %} /= [Tzs Fourty Million Thiry Eight Thousand Eight Hundred And Four only]       
-
+Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the TZS {%= total_net_pay %} [TZS {%=  total_net_pay_word %}].<br><br>
 
 <table class="table table-bordered">
 	<colgroup>
 		<col style="width: 5%">
-		<col style="width: 15%">
-		<col style="width: 40%">
 		<col style="width: 20%">
+		<col style="width: 40%">
+		<col style="width: 15%">
 		<col style="width: 20%">
 	</colgroup>
 	<thead>
 		<tr>
-			<th style="text-align: center">SR No.</th>
-			<th style="text-align: center">Employee ID</th>
-			<th style="text-align: center">Employee Name</th>
-			<th style="text-align: center">Bank A/C No.</th>
-			<th style="text-align: center">Net Pay</th>
+			<th style="text-align: center">{%= __("SR No.") %}</th>
+			<th style="text-align: center">{%= __("Employee ID") %}</th>
+			<th style="text-align: center">{%= __("Employee Name") %}</th>
+			<th style="text-align: center">{%= __("Account No.") %}</th>
+			<th style="text-align: center">{%= __("Net Pay") %}</th>
 		</tr>
 	</thead>
-    <tbody>
-        {% for(var i=0, l=data.length; i<l-1; i++) { %}  	 
+	<tbody>
+		{% for(var i=0, l=data.length; i<l-1; i++) { %}
 		<tr>
             <td>{%= i+1 %}</td>
-            <td>{%= data[i][ __("Emp ID")] %}</td>
             <td>{%= data[i][ __("Employee ID")] %}</td>
             <td>{%= data[i][ __("Employee Name")] %}</td>
             <td>{%= data[i][ __("Account No.")] %}</td>
             <td style="text-align: right">{%= data[i][ __("Net Pay")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </td>
-        </tr>				
+        </tr>
+		{% } %}
 	</tbody>
+	<tfoot>
+		<tr>
+			<th style="text-align: right" colspan=4><b>TOTAL</b></td>
+			<th style="text-align: right">{%= total_net_pay %} </th>		
+        </tr>
+	</tfoot>
 </table>
-
+<br><br>
 Kindly affect the transfers today only.<br><br>
-
-For and on behalf of <br>
-Acer Logistics (T) Limited,<br><br><br>
-
-_____________________________<br>
-Authorised Signatory
+For and on behalf of<br>
+Acer Logistics (T) Limited,<br><br><br><br>
+________________________________<br>
+Authorised Signatory<br>
