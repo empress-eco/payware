@@ -31,8 +31,8 @@
 	var from_date = filters.from_date; 
 	var to_date = filters.to_date;
 	var total_rows = data.length - 1;
-	var total_net_pay = data[1][ __("Net Pay")];
-	var total_net_pay_word = 0;
+	var total_net_pay = data[total_rows][ __("Net Pay")];
+	var total_net_pay_word = total_net_pay;
 %}
 
 <br><br><br><br><br><br><br><br><br><br>
@@ -48,9 +48,9 @@ Dar-Es-Salaam, Tanzania.<br>
 <br>
 Dear Sir,<br><br>
 
-Sub: Credit of Salaries of Employees to their respective Saving Accounts for the month of May 2019<br><br>
+<u><b>Sub: Credit of Salaries of Employees to their respective Saving Accounts for the month of {%= data[0][ __("Month")] %}</b></u><br><br>
 
-Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the TZS {%= total_net_pay.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} [TZS {%=  total_net_pay_word %}].<br><br>
+Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the {%= format_currency(total_net_pay) %} [TZS {%=  total_net_pay_word %}].<br><br>
 
 <table class="table table-bordered">
 	<colgroup>
@@ -73,7 +73,7 @@ Kindly refer to the subject matter. For the same kindly find attached the follow
 		{% for(var i=0, l=data.length; i<l-1; i++) { %}
 		<tr>
             <td>{%= i+1 %}</td>
-            <td>{%= data[i][ __("Employee ID")] %}</td>
+            <td>{%= data[i][ __("")] %}</td>
             <td>{%= data[i][ __("Employee Name")] %}</td>
             <td>{%= data[i][ __("Account No.")] %}</td>
             <td style="text-align: right">{%= data[i][ __("Net Pay")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </td>
@@ -83,7 +83,7 @@ Kindly refer to the subject matter. For the same kindly find attached the follow
 	<tfoot>
 		<tr>
 			<th style="text-align: right" colspan=4><b>TOTAL</b></td>
-			<th style="text-align: right">{%= total_net_pay %} </th>		
+			<th style="text-align: right">{%= total_net_pay.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </th>		
         </tr>
 	</tfoot>
 </table>
