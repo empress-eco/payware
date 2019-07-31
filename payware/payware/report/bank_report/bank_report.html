@@ -32,7 +32,7 @@
 	var to_date = filters.to_date;
 	var total_rows = data.length - 1;
 	var total_net_pay = data[1][ __("Net Pay")];
-	var total_net_pay_word = frappe.utils.money_in_words(total_net_pay);
+	var total_net_pay_word = 0;
 %}
 
 <br><br><br><br><br><br><br><br><br><br>
@@ -50,7 +50,7 @@ Dear Sir,<br><br>
 
 Sub: Credit of Salaries of Employees to their respective Saving Accounts for the month of May 2019<br><br>
 
-Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the TZS {%= total_net_pay %} [TZS {%=  total_net_pay_word %}].<br><br>
+Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the TZS {%= total_net_pay.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} [TZS {%=  total_net_pay_word %}].<br><br>
 
 <table class="table table-bordered">
 	<colgroup>
