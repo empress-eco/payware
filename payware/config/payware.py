@@ -93,6 +93,12 @@ def get_data():
 					"doctype": "Salary Slip",
 					"is_query_report": True,
 				},
+				{
+					"type": "report",
+					"name": "Bank Report",
+					"doctype": "Salary Slip",
+					"is_query_report": True,
+				},
 			]
 		},
 	]
