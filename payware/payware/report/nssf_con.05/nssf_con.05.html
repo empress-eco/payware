@@ -3,7 +3,7 @@
         padding-left: 10mm;
         padding-right: 5mm;
         padding-top: 0mm;
-		font-size: 9pt;	
+		font-size: 10pt;	
 }
 
 .print-format td, .print-format th {
@@ -16,7 +16,7 @@
 		padding-left: 10mm;
         padding-right: 5mm;
         padding-top: 0mm;
-		font-size: 9pt;
+		font-size: 10pt;
 		width: 8.5in;
 		height: 11in;
 		}
@@ -28,217 +28,65 @@
 }
 </style>
 
-{%	var from_date = filters.from_date %}
+{%	
+	var from_date = filters.from_date; 
+	var to_date = filters.to_date; 		
+%}
 {%	var year = from_date[0] + from_date[1] + from_date[2] + from_date[3] %}
-{%	var pmethod = data[0][ __("Payment Method")] + " (" + data[0][ __("Ref No.")] + ")" %}
 
 
-<h6 class="text-right">Form: NSSF CON.05</h6>
-<h4 class="text-center">
-	THE UNITED REPUBLIC OF TANZANIA<br>
-	NATIONAL SOCIAL SECURITY FUND<br>
-	MEMBER&apos;S CONTRIBUTION RECORD<br>
-</h4>
-<table class="table">
-	<tbody>
-		<tr>
-			<td width="50%"> 
-				<strong>Employer Name : </strong>{%= data[0][ __("Company")] %}<br>
-				<strong>Address : </strong>{%= data[0][ __("Company Address")] %}<br>
-				<strong>Employer&apos;s Registration Number : </strong><br>
-				<strong>Month of Contribution : </strong>{%= frappe.datetime.str_to_user(from_date) %}<br>
-				<strong>Regional/District Office : </strong><br>
-			</td>
-			<td width="50%"> 
-				<strong>Chq/Mo/Po No.: </strong>{%= pmethod %}<br>
-				<strong>Date of Chq/Mo/Po: </strong>{%= frappe.datetime.str_to_user(data[0][ __("Payment Date")]) %}<br>
-				<strong>Bank/Post Office Branch : </strong><br>
-				<strong>Year : </strong>{%= year %}<br>
-			</td>
-		</tr>
-	</tbody>
-</table>
-CONTRIBUTION FOR PERMENANT EMPLOYEES (MANDATORY)	
+<br><br><br><br><br><br><br><br><br><br>
+
+Ref. No. {%= data[i][ __("Payroll Entry")] %}
+<r>Date: {%= to_date %}</r>
+
+To,
+Branch Manager,
+Diamond Trust Bank (T) Limited,
+Kariakoo, Msimbazi Street,
+Dar-Es-Salaam, Tanzania.
+
+Dear Sir,
+
+Sub: Credit of Salaries of Employees to their respective Saving Accounts for the month of May 2019
+
+Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the {%= data[data.length][ __("Net Pay")] %} /= [Tzs Fourty Million Thiry Eight Thousand Eight Hundred And Four only]       
+
+
 <table class="table table-bordered">
-	<!--<colgroup>
-		<col style="width: 3%">
-		<col style="width: 17%">
-		<col style="width: 25%">
-		<col style="width: 12%">
-		<col style="width: 11%">
-		<col style="width: 12%">
+	<colgroup>
+		<col style="width: 5%">
+		<col style="width: 15%">
+		<col style="width: 40%">
 		<col style="width: 20%">
-	</colgroup>-->
+		<col style="width: 20%">
+	</colgroup>
 	<thead>
 		<tr>
-			<th style="text-align: center">{%= __("") %}</th>
-			<th style="text-align: center">{%= __("Emp ID") %}</th>
-			<th style="text-align: center">{%= __("Insured Person's Name") %}</th>
-			<th style="text-align: center">{%= __("Total Gross") %}</th>
-			<th style="text-align: center">{%= __("Membership<br>No") %}</th>
-			<th style="text-align: center">{%= __("Contributions<br>Tshs (20%)") %}</th>
-			<th style="text-align: center">{%= __("Remarks") %}</th>
+			<th style="text-align: center">SR No.</th>
+			<th style="text-align: center">Employee ID</th>
+			<th style="text-align: center">Employee Name</th>
+			<th style="text-align: center">Bank A/C No.</th>
+			<th style="text-align: center">Net Pay</th>
 		</tr>
 	</thead>
-	{% var ptotal = 0  %}
-	{% var pdata = [] %}
     <tbody>
         {% for(var i=0, l=data.length; i<l-1; i++) { %}  	 
 		<tr>
             <td>{%= i+1 %}</td>
             <td>{%= data[i][ __("Emp ID")] %}</td>
+            <td>{%= data[i][ __("Employee ID")] %}</td>
             <td>{%= data[i][ __("Employee Name")] %}</td>
-            <td style="text-align: right">{%= data[i][ __("Gross Pay")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </td>
-            <td style="text-align: center">{%= data[i][ __("Membership No")] %} </td>
-            <td style="text-align: right">{%= data[i][ __("Contribution")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </td>
-			<td></td>
-        </tr>
-		{% var ptotal = ptotal + data[i][ __("Contribution")]  %}
-		{% if ((i+1)%20 == 0) { %} 
-        <tr>
-			<th style="text-align: right" colspan=5><b>TOTAL</b></td>
-			<th style="text-align: right"><b>{%= ptotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></td>
-			<th>&nbsp;</td>
-        </tr>
-				
+            <td>{%= data[i][ __("Account No.")] %}</td>
+            <td style="text-align: right">{%= data[i][ __("Net Pay")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </td>
+        </tr>				
 	</tbody>
 </table>
-<p class="text-left">
-<br><br><br>
-Employer's Signature: ___________________________________<br>
-<strong>NOTE:</strong><br>
-*To be used for NSSF registered numbers and full contribution of 20% should be shown<br>
-*Each page total must be shown separately<br>
-*Summary of all page totals must be shown on last page<br>
-</p>
- {% pdata.push(ptotal) %}
- {% var ptotal = 0  %}
-<div class="page-break"></div>
 
-<h6 class="text-right">Form: NSSF CON.05</h6>
-<h4 class="text-center">
-	THE UNITED REPUBLIC OF TANZANIA<br>
-	NATIONAL SOCIAL SECURITY FUND<br>
-	MEMBER&apos;S CONTRIBUTION RECORD<br>
-</h4>
+Kindly affect the transfers today only.<br><br>
 
-<table class="table">
-	<tbody>
-		<tr>
-			<td width="50%"> 
-				<strong>Employer Name :</strong> {%= data[0][ __("Company")] %}<br>
-				<strong>Address :</strong> {%= data[0][ __("Company Address")] %}<br>
-				<strong>Employer&apos;s Registration Number :</strong> 99999<br>
-				<strong>Month of Contribution :</strong> January<br>
-				<strong>Regional/District Office :</strong> Ilala<br>
-			</td>
-			<td width="50%"> 
-				<strong>Chq/Mo/Po No.:</strong><br>
-				<strong>Date of Chq/Mo/Po:</strong><br>
-				<strong>Bank/Post Office Branch :</strong><br>
-				<strong>Year :</strong> 2018<br>
-			</td>
-		</tr>
-	</tbody>
-</table>				 
-CONTRIBUTION FOR PERMENANT EMPLOYEES (MANDATORY)
-				 
-				 <table class="table table-bordered">
-					<!--<colgroup>
-						<col style="width: 3%">
-						<col style="width: 17%">
-						<col style="width: 25%">
-						<col style="width: 12%">
-						<col style="width: 11%">
-						<col style="width: 12%">
-						<col style="width: 20%">
-					</colgroup>-->
-                  <thead>
-                    <tr>
-						<th style="text-align: center">{%= __("") %}</th>
-						<th style="text-align: center">{%= __("Emp ID") %}</th>
-						<th style="text-align: center">{%= __("Insured Person's Name") %}</th>
-						<th style="text-align: center">{%= __("Total Gross") %}</th>
-						<th style="text-align: center">{%= __("Membership<br>No") %}</th>
-						<th style="text-align: center">{%= __("Contributions<br>Tshs (20%)") %}</th>
-						<th style="text-align: center">{%= __("Remarks") %}</th>
-					</tr>
-                  </thead>
-				  <tbody>
-				
-			 {% } %}
-			 
-        {% } %}
+For and on behalf of <br>
+Acer Logistics (T) Limited,<br><br><br>
 
-        </tbody>
-		<tr>
-                <th style="text-align: right" colspan=5><b>TOTAL</b></td>
-                <th style="text-align: right"><b>{%= ptotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></td>
-				<th>&nbsp;</td>
-        </tr>
-		{% pdata.push(ptotal) %}
-</table>
-<p class="text-left">
-<br><br><br>
-Employer's Signature: ___________________________________<br>
-<strong>NOTE:</strong><br>
-*To be used for NSSF registered numbers and full contribution of 20% should be shown<br>
-*Each page total must be shown separately<br>
-*Summary of all page totals must be shown on last page<br>
-</p>
-<div class="page-break"></div>
-
-<h6 class="text-right">Form: NSSF CON.05</h6>		 
-<h4 class="text-center">
-	THE UNITED REPUBLIC OF TANZANIA<br>
-	NATIONAL SOCIAL SECURITY FUND<br>
-	MEMBER&apos;S CONTRIBUTION RECORD<br>
-</h4>
-<table class="table">
-	<tbody>
-		<tr>
-			<td width="50%"> 
-				<strong>Employer Name :</strong> {%= data[0][ __("Company")] %}<br>
-				<strong>Address :</strong> {%= data[0][ __("Company Address")] %}<br>
-				<strong>Employer&apos;s Registration Number :</strong> 99999<br>
-				<strong>Month of Contribution :</strong> January<br>
-				<strong>Regional/District Office :</strong> Ilala<br>
-			</td>
-			<td width="50%"> 
-				<strong>Chq/Mo/Po No.:</strong><br>
-				<strong>Date of Chq/Mo/Po:</strong><br>
-				<strong>Bank/Post Office Branch :</strong><br>
-				<strong>Year :</strong> 2018<br>
-			</td>
-		</tr>
-	</tbody>
-</table>
-PAGE SUMMARY
-   
-   <table class="table table-bordered" style="width: 50%">
-		<colgroup>
-			<col style="width: 25%">
-			<col style="width: 25%">
-		</colgroup>
-		<thead>
-			<tr>
-				<th style="text-align: center">{%= __("PAGE NUMBER") %}</th>
-				<th style="text-align: center">{%= __("AMOUNT") %}</th>
-			</tr>
-		</thead>
-		<tbody>
-	{% var grand_total = 0 %}
-	{% for(var i=0, l=pdata.length; i<l; i++) { %}  
-			<tr>
-				<td>Page No. {%= i+1 %}</td>
-				<td align="right">{%= pdata[i].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</td>
-			</tr>
-			{% grand_total = grand_total + pdata[i] %}
-	{% } %}
-		</tbody>
-		<tfoot>
-			<tr>
-				<th style="text-align: right">TOTAL</th>
-				<th style="text-align: right">{%= grand_total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</th>
-			</tr>
-		</tfoot>
+_____________________________<br>
+Authorised Signatory
