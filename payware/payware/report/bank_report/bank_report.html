@@ -32,7 +32,21 @@
 	var to_date = filters.to_date;
 	var total_rows = data.length - 1;
 	var total_net_pay = data[total_rows][ __("Net Pay")];
-	var total_net_pay_word = total_net_pay;
+
+	var net_pay_in_words = "test";
+
+	frappe_call_obj = frappe.call({
+		method: "payware.payware.utils.money_in_words",
+		args: {
+			number: total_net_pay
+		},
+		async:false,
+		callback: function(r){
+			if (r.message){
+				net_pay_in_words = r.message;
+			}
+		}
+	});
 %}
 
 <br><br><br><br><br><br><br><br><br><br>
@@ -50,7 +64,7 @@ Dear Sir,<br><br>
 
 <u><b>Sub: Credit of Salaries of Employees to their respective Saving Accounts for the month of {%= data[0][ __("Month")] %}</b></u><br><br>
 
-Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the {%= format_currency(total_net_pay) %} [TZS {%=  total_net_pay_word %}].<br><br>
+Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the {%= format_currency(total_net_pay) %} [{%= net_pay_in_words %}].<br><br>
 
 <table class="table table-bordered">
 	<colgroup>
