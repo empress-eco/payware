@@ -45,8 +45,8 @@
 			<td width="50%"> 
 				<strong>Employer Name : </strong>{%= data[0][ __("Company")] %}<br>
 				<strong>Address : </strong>{%= data[0][ __("Company Address")] %}<br>
-				<strong>Employer&apos;s Registration Number : </strong><br>
-				<strong>Month of Contribution : </strong>{%= frappe.datetime.str_to_user(from_date) %}<br>
+				<strong>Employer&apos;s Registration Number : </strong>{%= data[0][ __("NSSF Employer No")] %}<br>
+				<strong>Month of Contribution : </strong>{%= data[0][ __("Contribution Month")] %}<br>
 				<strong>Regional/District Office : </strong><br>
 			</td>
 			<td width="50%"> 

@@ -33,9 +33,9 @@
 	var total_rows = data.length - 1;
 	var total_net_pay = data[total_rows][ __("Net Pay")];
 
-	var net_pay_in_words = "test";
+	var net_pay_in_words = "";
 
-	frappe_call_obj = frappe.call({
+	frappe.call({
 		method: "payware.payware.utils.money_in_words",
 		args: {
 			number: total_net_pay
@@ -52,7 +52,7 @@
 <br><br><br><br><br><br><br><br><br><br>
 
 <P ALIGN=LEFT>Ref. No. {%= data[0][ __("Payroll Entry")] %}</P>
-<P ALIGN=RIGHT>Date: {%= to_date %}</P>
+<P ALIGN=RIGHT>Date: {%= frappe.datetime.global_date_format(to_date) %}</P>
 <P ALIGN=LEFT>
 To,<br>
 Branch Manager,<br>
@@ -64,7 +64,7 @@ Dear Sir,<br><br>
 
 <u><b>Sub: Credit of Salaries of Employees to their respective Saving Accounts for the month of {%= data[0][ __("Month")] %}</b></u><br><br>
 
-Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheq. ___________ dated {%= to_date %} drawn favoring yourself for the {%= format_currency(total_net_pay) %} [{%= net_pay_in_words %}].<br><br>
+Kindly refer to the subject matter. For the same kindly find attached the following statement showing the amount to be credited to the employees account maintained with you. We are enclosing Cheque Number <u>&nbsp;{%= data[0][ __("Cheque No.")] %}&nbsp;</u> dated <u>&nbsp;{%= frappe.datetime.global_date_format(data[0][ __("Cheque Date")]) %}&nbsp;</u> drawn favoring yourself for the {%= format_currency(total_net_pay) %} [{%= net_pay_in_words %}].<br><br>
 
 <table class="table table-bordered">
 	<colgroup>
@@ -87,7 +87,7 @@ Kindly refer to the subject matter. For the same kindly find attached the follow
 		{% for(var i=0, l=data.length; i<l-1; i++) { %}
 		<tr>
             <td>{%= i+1 %}</td>
-            <td>{%= data[i][ __("")] %}</td>
+            <td>{%= data[i][ __("Employee ID")] %}</td>
             <td>{%= data[i][ __("Employee Name")] %}</td>
             <td>{%= data[i][ __("Account No.")] %}</td>
             <td style="text-align: right">{%= data[i][ __("Net Pay")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %} </td>
@@ -104,6 +104,6 @@ Kindly refer to the subject matter. For the same kindly find attached the follow
 <br><br>
 Kindly affect the transfers today only.<br><br>
 For and on behalf of<br>
-Acer Logistics (T) Limited,<br><br><br><br>
+{%= data[0][ __("Company")] %}<br><br><br><br>
 ________________________________<br>
 Authorised Signatory<br>
