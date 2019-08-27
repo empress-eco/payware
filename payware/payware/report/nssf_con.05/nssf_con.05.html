@@ -126,21 +126,21 @@ Employer's Signature: ___________________________________<br>
 	<tbody>
 		<tr>
 			<td width="50%"> 
-				<strong>Employer Name :</strong> {%= data[0][ __("Company")] %}<br>
-				<strong>Address :</strong> {%= data[0][ __("Company Address")] %}<br>
-				<strong>Employer&apos;s Registration Number :</strong> 99999<br>
-				<strong>Month of Contribution :</strong> January<br>
-				<strong>Regional/District Office :</strong> Ilala<br>
+				<strong>Employer Name : </strong>{%= data[0][ __("Company")] %}<br>
+				<strong>Address : </strong>{%= data[0][ __("Company Address")] %}<br>
+				<strong>Employer&apos;s Registration Number : </strong>{%= data[0][ __("NSSF Employer No")] %}<br>
+				<strong>Month of Contribution : </strong>{%= data[0][ __("Contribution Month")] %}<br>
+				<strong>Regional/District Office : </strong><br>
 			</td>
 			<td width="50%"> 
-				<strong>Chq/Mo/Po No.:</strong><br>
-				<strong>Date of Chq/Mo/Po:</strong><br>
-				<strong>Bank/Post Office Branch :</strong><br>
-				<strong>Year :</strong> 2018<br>
+				<strong>Chq/Mo/Po No.: </strong>{%= pmethod %}<br>
+				<strong>Date of Chq/Mo/Po: </strong>{%= frappe.datetime.str_to_user(data[0][ __("Payment Date")]) %}<br>
+				<strong>Bank/Post Office Branch : </strong><br>
+				<strong>Year : </strong>{%= year %}<br>
 			</td>
 		</tr>
 	</tbody>
-</table>				 
+</table>		 
 CONTRIBUTION FOR PERMENANT EMPLOYEES (MANDATORY)
 				 
 				 <table class="table table-bordered">
@@ -198,17 +198,17 @@ Employer's Signature: ___________________________________<br>
 	<tbody>
 		<tr>
 			<td width="50%"> 
-				<strong>Employer Name :</strong> {%= data[0][ __("Company")] %}<br>
-				<strong>Address :</strong> {%= data[0][ __("Company Address")] %}<br>
-				<strong>Employer&apos;s Registration Number :</strong> 99999<br>
-				<strong>Month of Contribution :</strong> January<br>
-				<strong>Regional/District Office :</strong> Ilala<br>
+				<strong>Employer Name : </strong>{%= data[0][ __("Company")] %}<br>
+				<strong>Address : </strong>{%= data[0][ __("Company Address")] %}<br>
+				<strong>Employer&apos;s Registration Number : </strong>{%= data[0][ __("NSSF Employer No")] %}<br>
+				<strong>Month of Contribution : </strong>{%= data[0][ __("Contribution Month")] %}<br>
+				<strong>Regional/District Office : </strong><br>
 			</td>
 			<td width="50%"> 
-				<strong>Chq/Mo/Po No.:</strong><br>
-				<strong>Date of Chq/Mo/Po:</strong><br>
-				<strong>Bank/Post Office Branch :</strong><br>
-				<strong>Year :</strong> 2018<br>
+				<strong>Chq/Mo/Po No.: </strong>{%= pmethod %}<br>
+				<strong>Date of Chq/Mo/Po: </strong>{%= frappe.datetime.str_to_user(data[0][ __("Payment Date")]) %}<br>
+				<strong>Bank/Post Office Branch : </strong><br>
+				<strong>Year : </strong>{%= year %}<br>
 			</td>
 		</tr>
 	</tbody>
