@@ -81,6 +81,8 @@ doctype_js = {
 fixtures = [
 	{"doctype":"Print Format", "filters": [{"module":"Payware"}]},
 	{"doctype":"Report", "filters": [{"module":"Payware"}]},
+	{"doctype":"Custom Field", "filters": [["_user_tags", "like", ("%Payware%")]]},
+	{"doctype":"Property Setter", "filters": [["_user_tags", "like", ("%Payware%")]]},
 ]
 
 # Document Events

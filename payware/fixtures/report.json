@@ -1,12 +1,10 @@
 [
  {
   "add_total_row": 1,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -22,6 +20,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "NSSF-CON.05-test",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -34,12 +33,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -55,6 +52,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "Payee Withheld Detail",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -67,12 +65,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -88,6 +84,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "ITX219.01.E - SDL Monthly Return",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -118,12 +115,10 @@
  },
  {
   "add_total_row": 1,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -139,6 +134,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "SDL Report",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -169,12 +165,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 1,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -190,6 +184,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "Net Pay",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -214,12 +209,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -235,6 +228,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "WCF-3",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -247,12 +241,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -268,6 +260,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "NSSF-CON.05",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -280,12 +273,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 1,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": "{\"add_total_row\": 0}",
@@ -301,6 +292,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "WCF",
+  "report_script": null,
   "report_type": "Report Builder",
   "roles": [
    {
@@ -325,12 +317,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -346,6 +336,7 @@
   "ref_doctype": "Payware Settings",
   "reference_report": null,
   "report_name": "ITX 215.01.E - PAYE Withheld Part 1",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -370,12 +361,10 @@
  },
  {
   "add_total_row": 1,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -391,6 +380,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "ITX 215.01.E - PAYE Withheld Part 2",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -415,12 +405,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -436,6 +424,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "ITX 220.01.E - Employer\u2019s Half Year Certificate",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -466,12 +455,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -487,6 +474,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "ITX 219.01.E - SDL - Monthly Return",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -517,12 +505,10 @@
  },
  {
   "add_total_row": 0,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -538,6 +524,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "ITX 300.01.E - Employment Taxes Payment Credit Slip",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -568,12 +555,10 @@
  },
  {
   "add_total_row": 1,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "Yes",
   "javascript": null,
   "json": null,
@@ -589,6 +574,7 @@
   "ref_doctype": "Salary Slip",
   "reference_report": null,
   "report_name": "Bank Report",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
@@ -601,12 +587,10 @@
  },
  {
   "add_total_row": 1,
-  "color": null,
   "disable_prepared_report": 0,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Report",
-  "icon": null,
   "is_standard": "No",
   "javascript": null,
   "json": null,
@@ -622,6 +606,7 @@
   "ref_doctype": "Payware Settings",
   "reference_report": null,
   "report_name": "Hold Payment",
+  "report_script": null,
   "report_type": "Query Report",
   "roles": [
    {
