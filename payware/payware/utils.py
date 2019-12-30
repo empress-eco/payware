@@ -14,8 +14,9 @@ from dateutil.parser import parse
 
 @frappe.whitelist()
 def update_hourly_rate_additional_salary(doc, method):
-	frm.set_value("amount", frm.doc.hourly_rate / 100 * frm.doc.no_of_hours * r.message.base_salary_in_hours);
-
+	# frm.set_value("amount", frm.doc.hourly_rate / 100 * frm.doc.no_of_hours * r.message.base_salary_in_hours)
+	# get_employee_base_salary_in_hours(employee,payroll_date):
+	pass
 
 @frappe.whitelist()
 def create_disbursement_journal_entry(doc, method):
