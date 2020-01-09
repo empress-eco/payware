@@ -12,6 +12,7 @@
   "column_break_6",
   "department",
   "area_code",
+  "default_shift_type",
   "transactions_section",
   "start_time",
   "end_time",
@@ -90,10 +91,16 @@
    "fieldname": "make_employee_checkin",
    "fieldtype": "Button",
    "label": "Make Employee Checkin"
+  },
+  {
+   "fieldname": "default_shift_type",
+   "fieldtype": "Link",
+   "label": "Default Shift Type",
+   "options": "Shift Type"
   }
  ],
  "issingle": 1,
- "modified": "2020-01-08 02:37:11.704830",
+ "modified": "2020-01-09 22:49:51.137065",
  "modified_by": "yousef@dsr.com",
  "module": "Payware",
  "name": "Biometric Settings",

@@ -46,6 +46,14 @@ def get_password():
 	else:
 		frappe.throw(_("Please set Password"))
 
+def get_default_shift_type():
+	if frappe.db.get_value("Biometric Settings", None, "default_shift_type"):
+		default_shift_type = frappe.db.get_value("Biometric Settings", None, "default_shift_type")
+		return default_shift_type
+	else:
+		frappe.throw(_("Please set the Default Shift Type"))
+
+
 def get_department():
 	if frappe.db.get_value("Biometric Settings", None, "department"):
 		department = frappe.db.get_value("Biometric Settings", None, "department")

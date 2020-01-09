@@ -122,10 +122,10 @@ scheduler_events = {
  	"daily": [
  		"payware.payware.utils.generate_additional_salary_records"
  	],
-	"hourly": [
-		"payware.payware.doctype.biometric_settings.biometric_settings.get_transactions",
-		"payware.payware.doctype.biometric_settings.biometric_settings.make_employee_checkin"
-	]
+	# "hourly": [
+	# 	"payware.payware.doctype.biometric_settings.biometric_settings.get_transactions",
+	# 	"payware.payware.doctype.biometric_settings.biometric_settings.make_employee_checkin"
+	# ]
 # 	"weekly": [
 # 		"payware.tasks.weekly"
 # 	]
