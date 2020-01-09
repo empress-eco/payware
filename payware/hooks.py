@@ -106,7 +106,10 @@ doc_events = {
 	"Additional Salary": {
 		"on_submit": "payware.payware.utils.create_additional_salary_journal",
 		"on_cancel": "payware.payware.utils.create_additional_salary_journal"
-	}
+	},
+	"Employee": {
+		"validate": "payware.payware.doctype.biometric_settings.biometric_settings.check_employee_bio_info"
+	},
 }
 
 # Scheduled Tasks
@@ -118,10 +121,11 @@ scheduler_events = {
 # 	],
  	"daily": [
  		"payware.payware.utils.generate_additional_salary_records"
- 	]
-# 	"hourly": [
-# 		"payware.tasks.hourly"
-# 	],
+ 	],
+	"hourly": [
+		"payware.payware.doctype.biometric_settings.biometric_settings.get_transactions",
+		"payware.payware.doctype.biometric_settings.biometric_settings.make_employee_checkin"
+	]
 # 	"weekly": [
 # 		"payware.tasks.weekly"
 # 	]

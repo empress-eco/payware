@@ -31,6 +31,31 @@ def get_data():
 			]
 		},
 		{
+			"label": _("Biometric Settings"),
+			"items": [
+				{
+					"type": "doctype",
+					"name": "Biometric Settings",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "Transactions Log",
+					"onboard": 0,
+				},
+				{
+					"type": "doctype",
+					"name": "Transaction Fetch Log",
+					"onboard": 0,
+				},
+				{
+					"type": "doctype",
+					"name": "Area",
+					"onboard": 0,
+				},
+			]
+		},
+		{
 			"label": _("TRA Statutory Reports"),
 			"items": [
 				{
