@@ -8,6 +8,15 @@ from frappe import _
 from erpnext.accounts.utils import get_fiscal_year
 from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
 from num2words import num2words
+from calendar import monthrange
+from datetime import datetime
+from dateutil.parser import parse
+
+@frappe.whitelist()
+def update_hourly_rate_additional_salary(doc, method):
+	# frm.set_value("amount", frm.doc.hourly_rate / 100 * frm.doc.no_of_hours * r.message.base_salary_in_hours)
+	# get_employee_base_salary_in_hours(employee,payroll_date):
+	pass
 
 @frappe.whitelist()
 def create_disbursement_journal_entry(doc, method):
@@ -397,22 +406,14 @@ def generate_additional_salary_records():
 	if additional_salary_list:
 		# frappe.msgprint("In the salary loop")
 		for additional_salary_doc in additional_salary_list:
-			#frappe.msgprint("New Additional Salary Doc loaded: ")
-			# frappe.msgprint(str(additional_salary_doc.name) + " auto repeat additional salary loaded.")
-			# frappe.msgprint(str(additional_salary_doc.auto_repeat_end_date) + " auto repeat end date loaded.")
-			# frappe.msgprint(str(additional_salary_doc.last_transaction_date) + " last transaction date loaded.")
-			# frappe.msgprint(str(additional_salary_doc.auto_repeat_frequency) + " auto repeat frequency loaded.")
 			#additional_salary_doc.last_transaction_date
 			if additional_salary_doc.last_transaction_date == None:
-				#frappe.msgprint("Blank last transaction date found for " + additional_salary_doc.name + ". Setting payroll date of original transaction")
 				additional_salary_doc.last_transaction_date = additional_salary_doc.payroll_date
 			if additional_salary_doc.last_transaction_amount == 0:
-				# frappe.msgprint("Blank last transaction amount found " + str(additional_salary_doc.last_transaction_amount) + ". Setting amount of original transaction: " + str(additional_salary_doc.amount))
 				additional_salary_doc.last_transaction_amount = additional_salary_doc.amount
 			if additional_salary_doc.auto_repeat_frequency == "Weekly":
 				next_date = add_days(getdate(additional_salary_doc.last_transaction_date), 7)
 			else:
-				# frappe.msgprint("auto_repeat_frequency must be Monthly or Annually")
 				frequency_factor = auto_repeat_frequency.get(additional_salary_doc.auto_repeat_frequency, "Invalid frequency")
 				if frequency_factor == "Invalid frequency":
 					frappe.throw("Invalid frequency: {0} for {1} not found. Contact the developers!".format(additional_salary_doc.auto_repeat_frequency, additional_salary_doc.name))
@@ -470,6 +471,23 @@ def in_words(integer, in_million=True):
 	except OverflowError:
 		ret = num2words(integer, lang='en')
 	return ret.replace('-', ' ')
+
+@frappe.whitelist()
+def get_employee_base_salary_in_hours(employee,payroll_date):
+	"""
+	Returns the base salary in hours of the employee for this month
+	"""
+	last_salary_assignment = frappe.get_all("Salary Structure Assignment", filters={
+			'employee': employee, 'from_date': ['<=', payroll_date]},
+			fields=['name', 'base'],
+			order_by='`from_date` DESC, `creation` DESC',
+			limit=1)
+	last_salary_assignment = last_salary_assignment[0] if last_salary_assignment else None
+	payroll_date = datetime.strptime(payroll_date, '%Y-%m-%d')
+
+	month_days = monthrange(payroll_date.year, payroll_date.month)
+	base_salary_in_hours = last_salary_assignment.base / month_days[1] / 8
+	return {"base_salary_in_hours": base_salary_in_hours}
 
 #
 # convert currency to words
