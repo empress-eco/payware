@@ -29,11 +29,7 @@
   "column_break_22",
   "perspective_weightage_4",
   "section_break_24",
-  "goal_sheet_details_4",
-  "section_break_26",
-  "total_employee_rating",
-  "column_break_9",
-  "total_manager_rating"
+  "goal_sheet_details_4"
  ],
  "fields": [
   {
@@ -187,34 +183,9 @@
    "fieldtype": "Table",
    "label": "Goal Sheet Details 4",
    "options": "Goal Sheet Template Detail"
-  },
-  {
-   "fieldname": "section_break_26",
-   "fieldtype": "Section Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "total_employee_rating",
-   "fieldtype": "Float",
-   "label": "Total Employee Rating",
-   "precision": "1",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_9",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "total_manager_rating",
-   "fieldtype": "Float",
-   "label": "Total Manager Rating",
-   "permlevel": 1,
-   "precision": "1",
-   "read_only": 1
   }
  ],
- "modified": "2020-01-06 16:15:12.683505",
+ "modified": "2020-01-09 18:01:06.468274",
  "modified_by": "Administrator",
  "module": "Payware",
  "name": "Goal Sheet Template",
