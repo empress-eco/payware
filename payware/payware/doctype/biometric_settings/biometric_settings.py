@@ -8,7 +8,8 @@ from frappe.model.document import Document
 from frappe import _
 import requests
 import json
-from frappe.utils import today, get_datetime, add_to_date
+from frappe.utils import today, get_datetime, add_to_date, getdate
+# from datetime import date, datetime
 
 class BiometricSettings(Document):
 	pass
@@ -192,6 +193,10 @@ def check_transactions_id_is_unique(id):
 				return True
 
 
+def update_default_shift_type_last_sync(name,datetime):
+	frappe.db.set_value("Shift Type", name, "last_sync_of_checkin", datetime)
+
+
 @frappe.whitelist()
 def get_transactions(start_time= None,end_time=None):
 	if not start_time:
@@ -277,7 +282,39 @@ def creat_transaction_fetch_log(start_time,end_time,times=None,count=None):
 		)).insert(ignore_permissions = True)
 	if transaction_fetch_log_doc:
 		frappe.flags.ignore_account_permission = True
-		return transaction_fetch_log_doc.name	
+		update_default_shift_type_last_sync(get_default_shift_type(),end_time)
+		return transaction_fetch_log_doc.name
+
+
+def creat_shift_assignment(emp_id,date,shift_type):
+	
+	name = "New Shift Assignment"
+	d = frappe.db.sql("""
+				select name
+				from `tabShift Assignment`
+				where employee = %(employee)s and docstatus < 2
+				and date = %(date)s
+				and name != %(name)s""", {
+					"employee": emp_id,
+					"shift_type": shift_type,
+					"date": date,
+					"name": name
+				}, as_dict = 1)
+	for date_overlap in d:
+		if date_overlap['name']:
+			return
+
+	
+	shift_assignment_doc = frappe.get_doc(dict(
+			doctype = "Shift Assignment",
+			employee = emp_id,
+			shift_type = shift_type,
+			date = date,
+		)).insert(ignore_permissions = True)
+	if shift_assignment_doc:
+		frappe.flags.ignore_account_permission = True
+		shift_assignment_doc.submit()
+		return shift_assignment_doc.name
 
 
 
@@ -347,6 +384,8 @@ def make_employee_checkin():
 		transaction_doc = frappe.get_doc("Transactions Log",transaction_item)
 		if get_employee_name_id(transaction_doc.emp):
 			employee_name_id = get_employee_name_id(transaction_doc.emp)
+			punch_date =getdate(transaction_doc.punch_time)
+			creat_shift_assignment(employee_name_id,punch_date,get_default_shift_type())
 			if int(transaction_doc.punch_state) == 0 :
 				log_type = "IN"
 			else:
@@ -357,6 +396,7 @@ def make_employee_checkin():
 				log_type = log_type,
 				time = transaction_doc.punch_time,
 				device_id = transaction_doc.terminal_alias,
+				shift = get_default_shift_type(),
 			)).insert(ignore_permissions = True)
 			if employee_checkin_doc:
 				frappe.flags.ignore_account_permission = True
