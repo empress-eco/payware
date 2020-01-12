@@ -31,6 +31,35 @@ def get_data():
 			]
 		},
 		{
+			"label": _("Goals and KPI"),
+			"items": [
+				{
+					"type": "doctype",
+					"name": "Goal Sheet",
+					"onboard": 0,
+				},
+				{
+					"type": "doctype",
+					"name": "Goal Sheet Template",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "Designation KPI Template",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "HR Perspective",
+					"onboard": 1,
+				},
+				{
+					"type": "doctype",
+					"name": "Designation Objective",
+					"onboard": 1,
+				},
+			]
+		},		{
 			"label": _("Biometric Settings"),
 			"items": [
 				{
