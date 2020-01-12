@@ -9,7 +9,7 @@ from frappe import _
 import requests
 import json
 from frappe.utils import today, get_datetime, add_to_date, getdate
-# from datetime import date, datetime
+
 
 class BiometricSettings(Document):
 	pass
@@ -54,6 +54,23 @@ def get_default_shift_type():
 	else:
 		frappe.throw(_("Please set the Default Shift Type"))
 
+def get_employee_default_shift(employee_name= None):
+	if not employee_name:
+		return
+	else:
+		if frappe.db.get_value("Employee", employee_name, "default_shift"):
+			default_shift_type = frappe.db.get_value("Employee", employee_name, "default_shift")
+			return default_shift_type
+
+def get_shift_type(employee_name=None):
+	if not employee_name:
+		get_default_shift_type()
+	else:
+		if get_employee_default_shift(employee_name):
+			return get_employee_default_shift(employee_name)
+		else:
+			return get_default_shift_type()
+
 
 def get_department():
 	if frappe.db.get_value("Biometric Settings", None, "department"):
@@ -83,7 +100,29 @@ def get_employee_name_id(id):
 			employee_name = employee_name_list[0]
 			return employee_name
 	else:
-		frappe.throw(_("No employee has this identity: ") + id)
+		frappe.throw(_("No employee has this identity: ") + str(id))
+
+
+@frappe.whitelist()
+def auto_shift_assignment_for_active_today():
+	auto_shift = frappe.db.get_value("Biometric Settings", None, "auto_shift")
+	if int(auto_shift) == 1:
+		creat_shift_assignment_for_active_today()
+
+
+@frappe.whitelist()
+def auto_make_employee_checkin():
+	auto_checkin = frappe.db.get_value("Biometric Settings", None, "auto_checkin")
+	if int(auto_checkin) == 1:
+		make_employee_checkin()
+
+
+@frappe.whitelist()
+def auto_get_transactions():
+	auto_transactions = frappe.db.get_value("Biometric Settings", None, "auto_transactions")
+	if int(auto_transactions) == 1:
+		get_transactions()
+
 
 
 @frappe.whitelist()
@@ -203,14 +242,15 @@ def get_transactions(start_time= None,end_time=None):
 		start_time = today()
 	if not end_time:
 		end_time = 	str(get_datetime())
-	if start_time == end_time:
-		start_time = add_to_date(start_time,hours=-24)
+	if str(get_datetime(start_time)) == end_time:
+		start_time = add_to_date(start_time,days=-1)
 	space = "\n" * 2
 	tf_log_name = creat_transaction_fetch_log(start_time,end_time)
 	start = "start_time=" + start_time
 	end = "end_time=" + end_time
 	url = get_url() + "/iclock/api/transactions/?" + start + "&" + end
 	response = requests.get(url = url, headers = get_headers())
+	
 	if response.status_code == 200 :
 		res = json.loads(response.text)
 		count = res["count"]
@@ -286,8 +326,19 @@ def creat_transaction_fetch_log(start_time,end_time,times=None,count=None):
 		return transaction_fetch_log_doc.name
 
 
+
+def creat_shift_assignment_for_active_today():
+	active_emp_list = frappe.db.sql_list("""select name from `tabEmployee`
+				where status=%s """, "Active")
+	if active_emp_list:
+		for emp in active_emp_list:
+			if frappe.db.get_value("Employee", emp, "biometric_id"):
+				date = today()
+				shift_type = get_shift_type(emp)
+				creat_shift_assignment(emp,date,shift_type)
+
+
 def creat_shift_assignment(emp_id,date,shift_type):
-	
 	name = "New Shift Assignment"
 	d = frappe.db.sql("""
 				select name
@@ -304,7 +355,6 @@ def creat_shift_assignment(emp_id,date,shift_type):
 		if date_overlap['name']:
 			return
 
-	
 	shift_assignment_doc = frappe.get_doc(dict(
 			doctype = "Shift Assignment",
 			employee = emp_id,
@@ -315,7 +365,6 @@ def creat_shift_assignment(emp_id,date,shift_type):
 		frappe.flags.ignore_account_permission = True
 		shift_assignment_doc.submit()
 		return shift_assignment_doc.name
-
 
 
 def creat_transaction_log(data,tf_log_name,unique_list,repeated_list):
@@ -333,6 +382,10 @@ def creat_transaction_log(data,tf_log_name,unique_list,repeated_list):
 		if check_transactions_id_is_unique(transaction_row["id"]):
 			unique += 1
 			unique_list.append(transaction_row["id"])
+			if not transaction_row["id"] or not transaction_row["punch_time"] or not transaction_row["punch_state"] or not transaction_row["emp"]:
+				status = "Error"
+			else:
+				status = "Waiting"
 			transaction_log_doc = frappe.get_doc(dict(
 
 				doctype = "Transactions Log",
@@ -361,7 +414,7 @@ def creat_transaction_log(data,tf_log_name,unique_list,repeated_list):
 				emp = transaction_row["emp"],
 				terminal = transaction_row["terminal"],
 				transaction_fetch_log = tf_log_name,
-				status = "Waiting",
+				status = status,
 
 			)).insert(ignore_permissions = True)
 			if transaction_log_doc:
@@ -384,6 +437,7 @@ def make_employee_checkin():
 		transaction_doc = frappe.get_doc("Transactions Log",transaction_item)
 		if get_employee_name_id(transaction_doc.emp):
 			employee_name_id = get_employee_name_id(transaction_doc.emp)
+			shift = get_shift_type(employee_name_id)
 			punch_date =getdate(transaction_doc.punch_time)
 			creat_shift_assignment(employee_name_id,punch_date,get_default_shift_type())
 			if int(transaction_doc.punch_state) == 0 :
@@ -396,7 +450,7 @@ def make_employee_checkin():
 				log_type = log_type,
 				time = transaction_doc.punch_time,
 				device_id = transaction_doc.terminal_alias,
-				shift = get_default_shift_type(),
+				shift = shift,
 			)).insert(ignore_permissions = True)
 			if employee_checkin_doc:
 				frappe.flags.ignore_account_permission = True
