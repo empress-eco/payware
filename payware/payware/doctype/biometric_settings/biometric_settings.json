@@ -4,6 +4,8 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "enable_biometric_master",
+  "section_break_2",
   "server_url",
   "user_name",
   "password",
@@ -133,10 +135,20 @@
    "fieldname": "auto_shift",
    "fieldtype": "Check",
    "label": "Enable Auto Shift Assignment"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_biometric_master",
+   "fieldtype": "Check",
+   "label": "Enable Biometric Attendance"
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break"
   }
  ],
  "issingle": 1,
- "modified": "2020-01-10 23:01:27.689893",
+ "modified": "2020-01-13 23:21:09.116759",
  "modified_by": "yousef@dsr.com",
  "module": "Payware",
  "name": "Biometric Settings",

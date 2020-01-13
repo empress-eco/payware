@@ -7,6 +7,7 @@ import frappe
 from frappe.model.document import Document
 from frappe import _
 import requests
+from requests.exceptions import Timeout
 import json
 from frappe.utils import today, get_datetime, add_to_date, getdate
 
@@ -103,25 +104,44 @@ def get_employee_name_id(id):
 		frappe.throw(_("No employee has this identity: ") + str(id))
 
 
+def check_master_enable():
+	enable_biometric_master = frappe.db.get_value("Biometric Settings", None, "enable_biometric_master")
+	if int(enable_biometric_master) == 1:
+		return True
+	else:
+		return False
+
+
+def check_employee_enable(emp):
+	enable_biometric = frappe.db.get_value("Employee", emp, "enable_biometric")
+	if int(enable_biometric) == 1:
+		return True
+	else:
+		return False
+
+
 @frappe.whitelist()
 def auto_shift_assignment_for_active_today():
-	auto_shift = frappe.db.get_value("Biometric Settings", None, "auto_shift")
-	if int(auto_shift) == 1:
-		creat_shift_assignment_for_active_today()
+	if check_master_enable():
+		auto_shift = frappe.db.get_value("Biometric Settings", None, "auto_shift")
+		if int(auto_shift) == 1:
+			creat_shift_assignment_for_active_today()
 
 
 @frappe.whitelist()
 def auto_make_employee_checkin():
-	auto_checkin = frappe.db.get_value("Biometric Settings", None, "auto_checkin")
-	if int(auto_checkin) == 1:
-		make_employee_checkin()
+	if check_master_enable():
+		auto_checkin = frappe.db.get_value("Biometric Settings", None, "auto_checkin")
+		if int(auto_checkin) == 1:
+			make_employee_checkin()
 
 
 @frappe.whitelist()
 def auto_get_transactions():
-	auto_transactions = frappe.db.get_value("Biometric Settings", None, "auto_transactions")
-	if int(auto_transactions) == 1:
-		get_transactions()
+	if check_master_enable():
+		auto_transactions = frappe.db.get_value("Biometric Settings", None, "auto_transactions")
+		if int(auto_transactions) == 1:
+			get_transactions()
 
 
 
@@ -143,30 +163,35 @@ def get_new_bio_token():
 
 @frappe.whitelist()
 def check_employee_bio_info(doc, method):
-	if doc.company:
-			abbr = frappe.get_cached_value('Company',  doc.company,  'abbr')
-	if doc.name :
-		emp_code = abbr + "-" + doc.name
-		if doc.biometric_id:
-			biometric_id = doc.biometric_id
-			url = get_url() + "/personnel/api/employees/" + biometric_id +"/"
-			response = requests.get(url = url, headers = get_headers())
-			if response.status_code == 200 :
-				res = json.loads(response.text)
-				emp_id = str(res["id"])
-				doc.biometric_id = emp_id
-				if not doc.biometric_code:
-					doc.biometric_code = str(res["emp_code"])
-				if not doc.area:
-					for area_item in res["area"]:
-						area_row = doc.append('area',{})
-						area_row.area = area_item['area_name']
-						area_row.area_code = area_item['area_code']
-				update_employee_bio(doc,emp_id)
+	if check_master_enable() and check_employee_enable(doc.name):
+		if doc.company:
+				abbr = frappe.get_cached_value('Company',  doc.company,  'abbr')
+		if doc.name :
+			emp_code = abbr + "-" + doc.name
+			if doc.biometric_id:
+				biometric_id = doc.biometric_id
+				url = get_url() + "/personnel/api/employees/" + biometric_id +"/"
+				try:
+					response = requests.get(url = url, headers = get_headers(), timeout=5)
+				except Timeout:
+					frappe.msgprint(_("Error Please check Biotime server Request timeout"))
+				else:
+					if response.status_code == 200 :
+						res = json.loads(response.text)
+						emp_id = str(res["id"])
+						doc.biometric_id = emp_id
+						if not doc.biometric_code:
+							doc.biometric_code = str(res["emp_code"])
+						if not doc.area:
+							for area_item in res["area"]:
+								area_row = doc.append('area',{})
+								area_row.area = area_item['area_name']
+								area_row.area_code = area_item['area_code']
+						update_employee_bio(doc,emp_id)
+					else:
+						add_employee_bio(doc,emp_code)
 			else:
 				add_employee_bio(doc,emp_code)
-		else:
-			add_employee_bio(doc,emp_code)
 
 
 def add_employee_bio(doc,emp_code):
@@ -185,17 +210,21 @@ def add_employee_bio(doc,emp_code):
 				"area": area,
 				"department": get_department()
 				}
-		response = requests.post(url = url, headers = get_headers(), data = data)
-		if response.status_code == 200 or response.status_code == 201 :
-			res = json.loads(response.text)
-			first_name = res["first_name"]
-			emp_id = res["id"]
-			doc.biometric_id = emp_id
-			doc.biometric_code = emp_code
-			frappe.msgprint(_("Creatin Employee biometric ") + str(emp_code))
-			return emp_id
-		else:
-			frappe.throw(_("Error Creating Employee biometric "))
+		try:
+			response = requests.post(url = url, headers = get_headers(), data = data, timeout = 5)
+		except Timeout:
+			frappe.msgprint(_("Error Please check Biotime server Request timeout"))
+		else:	
+			if response.status_code == 200 or response.status_code == 201 :
+				res = json.loads(response.text)
+				first_name = res["first_name"]
+				emp_id = res["id"]
+				doc.biometric_id = emp_id
+				doc.biometric_code = emp_code
+				frappe.msgprint(_("Creatin Employee biometric ") + str(emp_code))
+				return emp_id
+			else:
+				frappe.throw(_("Error Creating Employee biometric "))
 
 
 def update_employee_bio(doc,emp_id):
@@ -214,11 +243,15 @@ def update_employee_bio(doc,emp_id):
 				"area": area,
 				"department": get_department()
 				}
-		response = requests.patch(url = url, headers = get_headers(), data = data)
-		if response.status_code == 200 :
-			return emp_id
-		else:
-			frappe.throw(_("Error Updating Employee biometric info ") +emp_id)
+		try:
+			response = requests.patch(url = url, headers = get_headers(), data = data, timeout=5)
+		except Timeout:
+			frappe.msgprint(_("Error Please check Biotime server Request timeout"))
+		else:	
+			if response.status_code == 200 :
+				return emp_id
+			else:
+				frappe.throw(_("Error Updating Employee biometric info ") +emp_id)
 
 
 
@@ -238,36 +271,46 @@ def update_default_shift_type_last_sync(name,datetime):
 
 @frappe.whitelist()
 def get_transactions(start_time= None,end_time=None):
-	if not start_time:
-		start_time = today()
-	if not end_time:
-		end_time = 	str(get_datetime())
-	if str(get_datetime(start_time)) == end_time:
-		start_time = add_to_date(start_time,days=-1)
-	space = "\n" * 2
-	tf_log_name = creat_transaction_fetch_log(start_time,end_time)
-	start = "start_time=" + start_time
-	end = "end_time=" + end_time
-	url = get_url() + "/iclock/api/transactions/?" + start + "&" + end
-	response = requests.get(url = url, headers = get_headers())
-	
-	if response.status_code == 200 :
-		res = json.loads(response.text)
-		count = res["count"]
-		get_transaction_pages(count,start_time,end_time,tf_log_name)
-		tf_log_doc = frappe.get_doc("Transaction Fetch Log",tf_log_name)
-		tf_log_doc.status = "Success"
-		tf_log_doc.save()
-		return "Success"
-		
-	else:
-		tf_log_doc.status = "Error"
-		res = json.loads(response.text)
-		if not tf_log_doc.log:
-			tf_log_doc.log = ""
-		tf_log_doc.log = tf_log_doc.log + space + str(res)
-		tf_log_doc.save()
-		return "Error"
+	if check_master_enable():
+		if not start_time:
+			start_time = today()
+		if not end_time:
+			end_time = 	str(get_datetime())
+		if str(get_datetime(start_time)) == end_time:
+			start_time = add_to_date(start_time,days=-1)
+		space = "\n" * 2
+		tf_log_name = creat_transaction_fetch_log(start_time,end_time)
+		start = "start_time=" + start_time
+		end = "end_time=" + end_time
+		url = get_url() + "/iclock/api/transactions/?" + start + "&" + end
+		try:
+			response = requests.get(url = url, headers = get_headers(), timeout=5)
+		except Timeout:
+			tf_log_doc = frappe.get_doc("Transaction Fetch Log",tf_log_name)
+			tf_log_doc.status = "Error"
+			if not tf_log_doc.log:
+				tf_log_doc.log = ""
+			tf_log_doc.log = tf_log_doc.log + space + str("Timeout Eroor")
+			tf_log_doc.save()
+			return "Error"
+		else:
+			if response.status_code == 200 :
+				res = json.loads(response.text)
+				count = res["count"]
+				get_transaction_pages(count,start_time,end_time,tf_log_name)
+				tf_log_doc = frappe.get_doc("Transaction Fetch Log",tf_log_name)
+				tf_log_doc.status = "Success"
+				tf_log_doc.save()
+				return "Success" 
+			
+			else:
+				tf_log_doc.status = "Error"
+				res = json.loads(response.text)
+				if not tf_log_doc.log:
+					tf_log_doc.log = ""
+				tf_log_doc.log = tf_log_doc.log + space + str(res)
+				tf_log_doc.save()
+				return "Error"
 
 
 def get_transaction_pages(count,start_time,end_time,tf_log_name):
@@ -332,10 +375,11 @@ def creat_shift_assignment_for_active_today():
 				where status=%s """, "Active")
 	if active_emp_list:
 		for emp in active_emp_list:
-			if frappe.db.get_value("Employee", emp, "biometric_id"):
-				date = today()
-				shift_type = get_shift_type(emp)
-				creat_shift_assignment(emp,date,shift_type)
+			if check_employee_enable(emp):
+				if frappe.db.get_value("Employee", emp, "biometric_id"):
+					date = today()
+					shift_type = get_shift_type(emp)
+					creat_shift_assignment(emp,date,shift_type)
 
 
 def creat_shift_assignment(emp_id,date,shift_type):
@@ -431,32 +475,34 @@ def creat_transaction_log(data,tf_log_name,unique_list,repeated_list):
 
 @frappe.whitelist()
 def make_employee_checkin():
-	transactions_log_list = frappe.db.sql_list("""select name from `tabTransactions Log`
-				where status=%s """, "Waiting")
-	for transaction_item in transactions_log_list:
-		transaction_doc = frappe.get_doc("Transactions Log",transaction_item)
-		if get_employee_name_id(transaction_doc.emp):
-			employee_name_id = get_employee_name_id(transaction_doc.emp)
-			shift = get_shift_type(employee_name_id)
-			punch_date =getdate(transaction_doc.punch_time)
-			creat_shift_assignment(employee_name_id,punch_date,get_default_shift_type())
-			if int(transaction_doc.punch_state) == 0 :
-				log_type = "IN"
-			else:
-				log_type = "OUT"
-			employee_checkin_doc = frappe.get_doc(dict(
-				doctype = "Employee Checkin",
-				employee = employee_name_id,
-				log_type = log_type,
-				time = transaction_doc.punch_time,
-				device_id = transaction_doc.terminal_alias,
-				shift = shift,
-			)).insert(ignore_permissions = True)
-			if employee_checkin_doc:
-				frappe.flags.ignore_account_permission = True
-				transaction_doc.employee_checkin = employee_checkin_doc.name
-				transaction_doc.status = "Linked"
-				transaction_doc.save()
-	return "Success"
+	if check_master_enable():
+		transactions_log_list = frappe.db.sql_list("""select name from `tabTransactions Log`
+					where status=%s """, "Waiting")
+		for transaction_item in transactions_log_list:
+			transaction_doc = frappe.get_doc("Transactions Log",transaction_item)
+			if get_employee_name_id(transaction_doc.emp):
+				employee_name_id = get_employee_name_id(transaction_doc.emp)
+				if check_employee_enable(employee_name_id):
+					shift = get_shift_type(employee_name_id)
+					punch_date =getdate(transaction_doc.punch_time)
+					creat_shift_assignment(employee_name_id,punch_date,get_default_shift_type())
+					if int(transaction_doc.punch_state) == 0 :
+						log_type = "IN"
+					else:
+						log_type = "OUT"
+					employee_checkin_doc = frappe.get_doc(dict(
+						doctype = "Employee Checkin",
+						employee = employee_name_id,
+						log_type = log_type,
+						time = transaction_doc.punch_time,
+						device_id = transaction_doc.terminal_alias,
+						shift = shift,
+					)).insert(ignore_permissions = True)
+					if employee_checkin_doc:
+						frappe.flags.ignore_account_permission = True
+						transaction_doc.employee_checkin = employee_checkin_doc.name
+						transaction_doc.status = "Linked"
+						transaction_doc.save()
+		return "Success"
 		
 	
