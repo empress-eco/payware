@@ -105,7 +105,7 @@ def get_employee_name_id(id):
 
 
 def check_master_enable():
-	enable_biometric_master = frappe.db.get_value("Biometric Settings", None, "enable_biometric_master")
+	enable_biometric_master = frappe.db.get_value("Biometric Settings", None, "enable_biometric_master") or 0
 	if int(enable_biometric_master) == 1:
 		return True
 	else:
