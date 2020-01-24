@@ -1,29 +1,29 @@
 {
- "add_total_row": 0, 
- "creation": "2019-06-29 19:56:46.181491", 
- "disable_prepared_report": 0, 
- "disabled": 0, 
- "docstatus": 0, 
- "doctype": "Report", 
- "idx": 0, 
- "is_standard": "Yes", 
- "modified": "2019-07-02 11:33:50.804806", 
- "modified_by": "Administrator", 
- "module": "Payware", 
- "name": "ITX 215.01.E - PAYE Withheld Part 1", 
- "owner": "Administrator", 
- "prepared_report": 0, 
- "query": "SELECT          MIN(ss.start_date)                                      AS \"Start Date::100\", \n                MAX(ss.end_date)                                        AS \"End Date::100\", \n                ss.employee_name                                        AS \"Employee Name:Data:0\",\n                SUM(IF (sd.salary_component = 'Basic', sd.amount, 0))   AS \"Basic Salary:Currency:0\",\n                SUM(IF (sd.salary_component = 'Housing', sd.amount, 0)) AS \"Housing:Currency:0\",\n                SUM(IF (sd.salary_component = 'TI', sd.amount, 0))      AS \"Other Allw and Benefits:Currency:0\",\n                SUM(ss.gross_pay)                                       AS \"Gross Pay:Currency:0\",\n                SUM(IF (sd.salary_component = 'NSSF', sd.amount, 0))    AS \"NSSF:Currency:0\", \n                SUM(IF (sd.salary_component = 'PAYE', sd.amount, 0))    AS \"PAYE:Currency:0\", \n                ss.company                                              AS \"Company:Data:0\", \n                cmp.tax_id                                              AS \"TIN:Data:0\", \n                cmp.email                                               AS \"Email:Data:0\", \n                cmp.phone_no                                            AS \"Phone:Data:0\", \n                cmp.fax                                                 AS \"Fax Number:Data:0\", \n                pwspob.value                                            AS \"P O Box:Data:0\", \n                pwsst.value                                             AS \"Street:Data:0\", \n                pwspn.value                                             AS \"Plot Number:Data:0\",\n                pwsbn.value                                             AS \"Block Number:Data:0\",\n                pwscty.value                                            AS \"City:Data:0\"\nFROM            `tabSalary Slip` ss \nLEFT OUTER JOIN `tabSalary Detail` sd \nON              sd.parent = ss.name \nLEFT OUTER JOIN `tabCompany` cmp \nON              ss.company = cmp.name \nJOIN            `tabSingles` pwspob \nON              pwspob.doctype = \"Payware Settings\" \nAND             pwspob.field = \"p_o_box\" \nJOIN            `tabSingles` pwsst \nON              pwsst.doctype = \"Payware Settings\" \nAND             pwsst.field = \"street\" \nJOIN            `tabSingles` pwspn \nON              pwspn.doctype = \"Payware Settings\" \nAND             pwspn.field = \"plot_number\" \nJOIN            `tabSingles` pwsbn \nON              pwsbn.doctype = \"Payware Settings\" \nAND             pwsbn.field = \"block_number\" \nJOIN            `tabSingles` pwscty \nON              pwscty.doctype = \"Payware Settings\" \nAND             pwscty.field = \"city\" \nWHERE           ss.start_date >= %(from_date)s \nAND             ss.end_date <= %(to_date)s \nAND             ss.docstatus = 1 \nGROUP BY        ss.employee_name \nHAVING          SUM(ss.gross_pay) > 0", 
- "ref_doctype": "Payware Settings", 
- "report_name": "ITX 215.01.E - PAYE Withheld Part 1", 
- "report_type": "Query Report", 
+ "add_total_row": 0,
+ "creation": "2020-01-14 06:37:53.726102",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2020-01-24 16:33:23.848182",
+ "modified_by": "Administrator",
+ "module": "Payware",
+ "name": "ITX 215.01.E - PAYE Withheld Part 1",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT          MIN(ss.start_date)  AS \"Start Date::100\", \n                MAX(ss.end_date) AS \"End Date::100\", \n                ss.employee_name AS \"Employee Name:Data:0\",\n                SUM(IF (sd.salary_component = 'Basic', sd.amount, 0)) AS \"Basic Salary:Currency:0\",\n                SUM(IF (sd.salary_component = 'Housing', sd.amount, 0)) AS \"Housing:Currency:0\",\n                SUM(IF (sd.salary_component = 'TI', sd.amount, 0)) AS \"Other Allw and Benefits:Currency:0\",\n                SUM(IF (sd.salary_component = 'Basic', ss.gross_pay, 0)) AS \"Gross Pay:Currency:0\",\n                SUM(IF (sd.salary_component = 'NSSF', sd.amount, 0)) AS \"NSSF:Currency:0\", \n                SUM(IF (sd.salary_component = 'PAYE', sd.amount, 0)) AS \"PAYE:Currency:0\", \n                ss.company AS \"Company:Data:0\", \n                cmp.tax_id AS \"TIN:Data:0\", \n                cmp.email AS \"Email:Data:0\", \n                cmp.phone_no AS \"Phone:Data:0\", \n                cmp.fax AS \"Fax Number:Data:0\", \n                pwspob.value AS \"P O Box:Data:0\", \n                pwsst.value AS \"Street:Data:0\", \n                pwspn.value AS \"Plot Number:Data:0\",\n                pwsbn.value AS \"Block Number:Data:0\",\n                pwscty.value AS \"City:Data:0\"\nFROM            `tabSalary Slip` ss LEFT OUTER JOIN `tabSalary Detail` sd ON ss.name = sd.parent\n                                    LEFT OUTER JOIN `tabCompany` cmp ON ss.company = cmp.name \n                                    JOIN            `tabSingles` pwspob ON pwspob.doctype = \"Payware Settings\" AND pwspob.field = \"p_o_box\" \n                                    JOIN            `tabSingles` pwsst ON pwsst.doctype = \"Payware Settings\" AND pwsst.field = \"street\" \n                                    JOIN            `tabSingles` pwspn ON pwspn.doctype = \"Payware Settings\" AND pwspn.field = \"plot_number\" \n                                    JOIN            `tabSingles` pwsbn ON pwsbn.doctype = \"Payware Settings\" AND pwsbn.field = \"block_number\" \n                                    JOIN            `tabSingles` pwscty ON  pwscty.doctype = \"Payware Settings\" AND pwscty.field = \"city\" \nWHERE           ss.start_date >= %(from_date)s \nAND             ss.end_date <= %(to_date)s \nAND             ss.docstatus = 1 \nGROUP BY        ss.employee_name ",
+ "ref_doctype": "Payware Settings",
+ "report_name": "ITX 215.01.E - PAYE Withheld Part 1",
+ "report_type": "Query Report",
  "roles": [
   {
    "role": "HR User"
-  }, 
+  },
   {
    "role": "HR Manager"
-  }, 
+  },
   {
    "role": "Employee"
   }
