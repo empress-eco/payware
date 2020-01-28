@@ -24,7 +24,7 @@ def create_disbursement_journal_entry(doc, method):
 	precision = frappe.get_precision("Journal Entry Account", "debit_in_account_currency")
 
 	journal_entry = frappe.new_doc('Journal Entry')
-	journal_entry.voucher_type = 'Bank Entry'
+	journal_entry.voucher_type = 'Cash Entry'
 	journal_entry.user_remark = _('Payment of {0} disbursed on {1} starting from {2}')\
 		.format(doc.name, doc.disbursement_date, doc.repayment_start_date)
 	journal_entry.company = doc.company
