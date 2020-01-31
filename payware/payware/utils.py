@@ -486,7 +486,8 @@ def get_employee_base_salary_in_hours(employee,payroll_date):
 	payroll_date = datetime.strptime(payroll_date, '%Y-%m-%d')
 
 	month_days = monthrange(payroll_date.year, payroll_date.month)
-	base_salary_in_hours = last_salary_assignment.base / month_days[1] / 8
+	#base_salary_in_hours = last_salary_assignment.base / month_days[1] / 8
+	base_salary_in_hours = last_salary_assignment.base / 195
 	return {"base_salary_in_hours": base_salary_in_hours}
 
 #
