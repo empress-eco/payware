@@ -485,8 +485,10 @@ def get_employee_base_salary_in_hours(employee,payroll_date):
 	last_salary_assignment = last_salary_assignment[0] if last_salary_assignment else None
 	payroll_date = datetime.strptime(payroll_date, '%Y-%m-%d')
 
-	month_days = monthrange(payroll_date.year, payroll_date.month)
-	base_salary_in_hours = last_salary_assignment.base / month_days[1] / 8
+	working_hours_per_month = frappe.db.get_single_value('Payware Settings', 'working_hours_per_month')
+	if not working_hours_per_month:
+		frappe.throw(__("Working Hours per Month not defind in Payware settings. Define it there and try again."))
+	base_salary_in_hours = last_salary_assignment.base / working_hours_per_month
 	return {"base_salary_in_hours": base_salary_in_hours}
 
 #
