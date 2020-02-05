@@ -38,13 +38,13 @@ def create_disbursement_journal_entry(doc, method):
 
 	journal_entry.set("accounts", [
 		{
-			"account": doc.loan_account,
+			"account": doc.payment_account,
 			"credit_in_account_currency": payment_amount,
 			"reference_type": doc.doctype,
 			"reference_name": doc.name
 		},
 		{
-			"account": doc.payment_account,
+			"account": doc.loan_account,
 			"debit_in_account_currency": payment_amount,
 			"reference_type": doc.doctype,
 			"reference_name": doc.name
