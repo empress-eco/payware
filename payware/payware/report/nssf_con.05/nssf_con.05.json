@@ -7,7 +7,7 @@
  "doctype": "Report",
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2020-02-19 11:42:45.651592",
+ "modified": "2020-02-19 12:08:05.279361",
  "modified_by": "Administrator",
  "module": "Payware",
  "name": "NSSF-CON.05",
@@ -20,6 +20,18 @@
  "roles": [
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "HR User"
+  },
+  {
+   "role": "HR Manager"
   }
  ]
 }

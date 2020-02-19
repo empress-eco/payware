@@ -249,7 +249,7 @@
   "javascript": null,
   "json": null,
   "letter_head": null,
-  "modified": "2020-02-19 11:42:45.651592",
+  "modified": "2020-02-19 12:08:05.279361",
   "module": "Payware",
   "name": "NSSF-CON.05",
   "parent": null,
@@ -268,6 +268,30 @@
     "parentfield": "roles",
     "parenttype": "Report",
     "role": "System Manager"
+   },
+   {
+    "parent": "NSSF-CON.05",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts Manager"
+   },
+   {
+    "parent": "NSSF-CON.05",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts User"
+   },
+   {
+    "parent": "NSSF-CON.05",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "HR User"
+   },
+   {
+    "parent": "NSSF-CON.05",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "HR Manager"
    }
   ]
  },
