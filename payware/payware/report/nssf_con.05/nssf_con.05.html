@@ -42,7 +42,7 @@
 
 {% var total_nssf = 0  %}
 {% var page_total = 0  %}
-{% for(var i=0, l=data.length; i<l-1; i++) { %} 
+{% for(var i=0, l=data.length; i<=l-1; i++) { %} 
 	{% var total_nssf = total_nssf + data[i][ __("Contribution")]  %}
 {% } %}
 
