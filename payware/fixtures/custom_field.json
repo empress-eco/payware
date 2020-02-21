@@ -28,7 +28,7 @@
   "modified": "2020-02-21 19:40:39.426747",
   "name": "Salary Component-sdl_emolument_category",
   "no_copy": 0,
-  "options": "Any Other Allowances\nBasic pay\nLeave pay\nSick pay\nPayment in Lieu of Leave\nFees\nCommission\nBonus\nGratuity\nSubsistence Allowance\nTraveling Allowance\nEntertainment Allowance\nHousing Allowance",
+  "options": "None\nAny Other Allowances\nBasic pay\nLeave pay\nSick pay\nPayment in Lieu of Leave\nFees\nCommission\nBonus\nGratuity\nSubsistence Allowance\nTraveling Allowance\nEntertainment Allowance\nHousing Allowance",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
