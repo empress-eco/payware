@@ -7,7 +7,7 @@
  "doctype": "Report",
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2020-02-21 21:26:00.563258",
+ "modified": "2020-02-22 09:28:22.326557",
  "modified_by": "Administrator",
  "module": "Payware",
  "name": "ITX 219.01.E - SDL - Monthly Return",
@@ -29,6 +29,12 @@
   },
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Accounts Manager"
   }
  ]
 }

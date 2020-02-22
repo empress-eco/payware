@@ -487,7 +487,7 @@
   "javascript": null,
   "json": null,
   "letter_head": null,
-  "modified": "2020-02-21 21:26:00.563258",
+  "modified": "2020-02-22 09:28:22.326557",
   "module": "Payware",
   "name": "ITX 219.01.E - SDL - Monthly Return",
   "parent": null,
@@ -524,6 +524,18 @@
     "parentfield": "roles",
     "parenttype": "Report",
     "role": "System Manager"
+   },
+   {
+    "parent": "ITX 219.01.E - SDL - Monthly Return",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts User"
+   },
+   {
+    "parent": "ITX 219.01.E - SDL - Monthly Return",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Accounts Manager"
    }
   ]
  },
