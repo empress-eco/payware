@@ -41,7 +41,6 @@
 	var total = data[0][ __("SDL")] + data[0][ __("PAYE")]; 
 %}
 
-
 <p class="manifest-header text-center">
 	<img src="/private/files/tra-logo.gif" style="width: 35%;"/>
 </p>
@@ -108,7 +107,7 @@
 				Division/Branch 
 			</td>
 			<td colspan="3" style="border-bottom:1px solid black;">
-				&nbsp;
+				P. O. Box {%= data[0][ __("P O Box")] %}, {%= data[0][ __("City")] %} 
 			</td>
 			<td colspan="2" style="">
 				&nbsp;
@@ -213,7 +212,7 @@
 				 <B>PAYE,</B> amount TZS
 			</td>
 			<td colspan="2" style="border-bottom:1px solid black;">
-				 &nbsp;&nbsp;&nbsp;&nbsp;{%= data[0][ __("PAYE")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}
+				 &nbsp;&nbsp;&nbsp;&nbsp;{%= data[0][ __("PAYE")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
 			</td>
 		</tr>
 		<tr>
@@ -224,33 +223,33 @@
 				 <B>SDL,</B> amount TZS
 			</td>
 			<td colspan="2" style="border-bottom:1px solid black;">
-				 &nbsp;&nbsp;&nbsp;&nbsp;{%= data[0][ __("SDL")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}
+				 &nbsp;&nbsp;&nbsp;&nbsp;{%= data[0][ __("SDL")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
 			</td>
 		</tr>
 		<tr>
 			<td colspan="4">
-				 Please accept for the credit of the Commissioner the sum of TZS
+				Please accept for the credit of the Commissioner the sum of TZS
 			</td>
 			<td colspan="2" style="border-bottom:1px solid black;">
-				 &nbsp;&nbsp;&nbsp;&nbsp;{%= total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}
+				&nbsp;&nbsp;&nbsp;&nbsp;{%= total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
 			</td>
 		</tr>
 		<tr>
 			<td colspan="1" rowspan=2>
-				 In words (sum):
+				In words (sum):
 			</td>
-			<td colspan="5" style="border-bottom:1px solid black;">
-				 &nbsp;
-			</td>
-		</tr>
-		<tr>
-			<td colspan="5" style="border-bottom:1px solid black;">
-				 &nbsp;
+			<td colspan="5" rowspan=2 style="border-bottom:1px solid black;">
+				&nbsp;
 			</td>
 		</tr>
 		<tr>
-			<td colspan="6" style="">
-				 Payroll Month(s) for /from     _______________   _____ / 20 _________     to__________________ / 20_________________                                
+			<td colspan="5" style="border-bottom:1px solid black;">
+				&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td colspan="6" style="border-bottom:1px solid black;">
+				Payroll Month(s) for {%= data[0][ __("Month")] %}                               
 			</td>
 		</tr>
 		<tr>
