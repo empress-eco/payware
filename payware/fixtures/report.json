@@ -9,6 +9,56 @@
   "javascript": null,
   "json": null,
   "letter_head": null,
+  "modified": "2020-02-21 16:33:01.492148",
+  "module": "Payware",
+  "name": "SDL 219 Trial",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "prepared_report": 0,
+  "query": null,
+  "ref_doctype": "Salary Slip",
+  "reference_report": null,
+  "report_name": "SDL 219 Trial",
+  "report_script": null,
+  "report_type": "Script Report",
+  "roles": [
+   {
+    "parent": "SDL 219 Trial",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "HR Manager"
+   },
+   {
+    "parent": "SDL 219 Trial",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "HR User"
+   },
+   {
+    "parent": "SDL 219 Trial",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Employee"
+   },
+   {
+    "parent": "SDL 219 Trial",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "System Manager"
+   }
+  ]
+ },
+ {
+  "add_total_row": 1,
+  "disable_prepared_report": 0,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Report",
+  "is_standard": "Yes",
+  "javascript": null,
+  "json": null,
+  "letter_head": null,
   "modified": "2019-04-15 23:10:22.838504",
   "module": "Payware",
   "name": "NSSF-CON.05-test",

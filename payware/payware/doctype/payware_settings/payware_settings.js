@@ -2,7 +2,13 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Payware Settings', {
-	refresh: function(frm) {
-
+	setup: function(frm) {
+        frm.set_query('bank_account_for_tra', function() {
+            return {
+                filters: {
+                    
+                }
+            }
+        });
 	}
-});
+})

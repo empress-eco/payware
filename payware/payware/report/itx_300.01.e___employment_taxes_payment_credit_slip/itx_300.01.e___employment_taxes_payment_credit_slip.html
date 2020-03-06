@@ -2,34 +2,73 @@
 .print-format {
         padding-left: 10mm;
         padding-right: 5mm;
-        padding-top: 0mm;
-		font-size: 14pt;	
+        padding-top: 5mm;
+		font-size: 9.5pt !important;	
+}
+
+.print-format td, .print-format th {
+   vertical-align: top !important;
+   padding: 2px !important;
+
 }
 
 @media screen {
 	.print-format {
 		width: 8.5in;
 		height: 11in;
-		}
 	}
-</style>
-	<p class="manifest-header text-center">
-		<img src="/private/files/tra-logo.gif" style="width: 35%;"/>
-	</p>
-	<h3 class="manifest-header text-center">
-		DEPARTMENT………………………………<br>
-		EMPLOYMENT TAXES PAYMENT CREDIT SLIP
-	</h3>
+		
+	.print-format {
+        padding-left: 10mm;
+        padding-right: 5mm;
+        padding-top: 5mm;
+		font-size: 9.5pt !important;	
+	}
 
-<table cellspacing=0 cellpadding=0 style="border: 0px solid black;">
-	<colgroup>
-		<col style="width: 60%" />
-		<col style="width: 40%" />
-	 </colgroup>
-	 <tbody>
+
+	.print-format td, .print-format th {
+		vertical-align: top !important;
+		padding: 2px !important;
+	}
+}	
+	
+</style>
+
+{% var start_date = filters.from_date  %}
+{% var end_date = filters.to_date  %}
+{% var tin = data[0][ __("TIN")]  %}
+{% 
+	var total = data[0][ __("SDL")] + data[0][ __("PAYE")]; 
+%}
+
+
+<p class="manifest-header text-center">
+	<img src="/private/files/tra-logo.gif" style="width: 35%;"/>
+</p>
+
+<h4 class="manifest-header text-center">
+	DEPARTMENT………………………………<br><br>
+	EMPLOYMENT TAXES PAYMENT CREDIT SLIP
+</h4>
+<br>
+<table style="border: 0px solid black; width: 95%; margin: 0 auto; border-collapse: separate; border-spacing:0px 8px !important;">
+	  <colgroup>
+		<col style="width: 15%;">
+		<col style="width: 15%;">
+		<col style="width: 10%;">
+		<col style="width: 15%;">
+		<col style="width: 20%">
+		<col style="width: 25%">
+	  </colgroup>
+	  <tbody>
 		<tr>
-			<td>Name of Employer: <u>&nbsp;&nbsp;{%= data[0][ __("Company")] %}&nbsp;&nbsp;&nbsp;</u></td>
-			<td>
+			<td colspan="1">
+				<b>Employer's Name</b>
+			</td>
+			<td colspan="3" style="border-bottom:1px solid black;">
+				{%= data[0][ __("Company")] %}
+			</td>
+			<td colspan="2" style="">
 				<table>
 					<colgroup>
 						<col width="70">
@@ -47,7 +86,7 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<td width=30>TIN</td>
+							<td style="text-align: center"><b>TIN</b></td>
 							<td style="border: 1px solid black; text-align: center;">{%= tin[0] %}</td>
 							<td style="border: 1px solid black; text-align: center;">{%= tin[1] %}</td>
 							<td style="border: 1px solid black; text-align: center;">{%= tin[2] %}</td>
@@ -65,15 +104,230 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Division/Branch: __________________________________________</td>
+			<td colspan="1">
+				Division/Branch 
+			</td>
+			<td colspan="3" style="border-bottom:1px solid black;">
+				&nbsp;
+			</td>
+			<td colspan="2" style="">
+				&nbsp;
+			</td>
 		</tr>
 		<tr>
-			<td><br>Name of Bank:____________________________________,&nbsp;&nbsp;&nbsp;Branch ________________,</td>
-			<td><br>Taxpayer’s Bank A/c No._____________________</td>
+			<td colspan="1">
+				Name of Bank
+			</td>
+			<td colspan="1" style="border-bottom:1px solid black;">
+				&nbsp;
+			</td>
+			<td colspan="1" style="text-align: center">
+				Branch
+			</td>
+			<td colspan="1" style="border-bottom:1px solid black;">
+				&nbsp;
+			</td>
+			<td colspan="1" style="text-align: center">
+				Taxpayer’s Bank A/c No.
+			</td>
+			<td colspan="1" style="border-bottom:1px solid black;">
+				&nbsp;
+			</td>
 		</tr>
 		<tr>
-			<td><br>Employment Taxes   Bank Account No:   ______________________                  </td>
+			<td colspan="2">
+				Employment Taxes Bank Account No:
+			</td>
+			<td colspan="2" style="border-bottom:1px solid black;">
+				&nbsp;
+			</td>
+			<td colspan="2" style="">
+				&nbsp;
+			</td>
 		</tr>
-	 </tbody>
-</table>
+		<tr>
+			<td colspan="2" rowspan="5">
+				<div style="width: 100%; height: 250px; padding: 10px; border: 1px solid black; margin: 0;">Bank Stamp and Teller’s Signature</div>
+			</td>
+			<td colspan="4">
+				<div style="position: relative; width: 100%; height: 100px; padding: 10px; border: 1px solid black; margin: 0;">
+					<div>Tax Debit Number(s)<br>(*)</div>
+					<div style="position: absolute; top: 15px; right: 0px;">
+						<table style="width: 200px;" cellspacing="0" cellpadding="0">
+							<tr>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan=9>&nbsp;</td>
+							</tr>
+							<tr>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+								<td style="border: 1px solid black; border-top: 0px !important;">&nbsp;</td>
+							</tr>  
+						</table>
+					</div>
+				</div>
+				
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<font style="font-size: 150%;">&#9746;</font> &nbsp;&nbsp;&nbsp; Regular (monthly) payment (tick if yes) (*)
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<font style="font-size: 150%;">&#9744;</font> &nbsp;&nbsp;&nbsp; Other payments (tick if yes) (*)
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<font style="font-size: 150%;">&#9744;</font> &nbsp;&nbsp;&nbsp; Nil-Statement PAYE (tick if yes) (*)
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<font style="font-size: 150%;">&#9744;</font> &nbsp;&nbsp;&nbsp; NIL-Statement SDL (tick if yes (*)
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				 &nbsp;
+			</td>
+			<td colspan="2">
+				 <B>PAYE,</B> amount TZS
+			</td>
+			<td colspan="2" style="border-bottom:1px solid black;">
+				 &nbsp;&nbsp;&nbsp;&nbsp;{%= data[0][ __("PAYE")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				 &nbsp;
+			</td>
+			<td colspan="2">
+				 <B>SDL,</B> amount TZS
+			</td>
+			<td colspan="2" style="border-bottom:1px solid black;">
+				 &nbsp;&nbsp;&nbsp;&nbsp;{%= data[0][ __("SDL")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				 Please accept for the credit of the Commissioner the sum of TZS
+			</td>
+			<td colspan="2" style="border-bottom:1px solid black;">
+				 &nbsp;&nbsp;&nbsp;&nbsp;{%= total.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="1" rowspan=2>
+				 In words (sum):
+			</td>
+			<td colspan="5" style="border-bottom:1px solid black;">
+				 &nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td colspan="5" style="border-bottom:1px solid black;">
+				 &nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td colspan="6" style="">
+				 Payroll Month(s) for /from     _______________   _____ / 20 _________     to__________________ / 20_________________                                
+			</td>
+		</tr>
+		<tr>
+			<td colspan="1">
+				 If submitting cheques
+			</td>
+			<td colspan="5" style="">
+				 <table border=1 style="width: 100%; border-bottom:1px solid black;">
+					<tbody>
+						<tr>
+							<td style="height: 10px;">Cheque No</td>
+							<td style="height: 10px;">Name of Bank / Branch</td>
+							<td style="height: 10px;">Amount</td>
+						</tr>
+						<tr>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="height: 10px;">TOTAL</td>
+							<td style="height: 10px;">&nbsp;</td>
+							<td style="height: 10px;">&nbsp;</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="5">
+				<font style="font-size: 8pt;">
+				<b>Declaration:</b><br>
+				I/We certify that the particulars entered on this form are correct.<br>
+				Name ______________________________________________ Stamp (if any):<br><br>
 
+				Signature__________________________________<br><br>
+				Date:   _________________ / _______________ / 20_________________<br><br>
+				Distribution by accepting bank:<br>                                                                                                
+				Original:    for Taxpayer<br>
+				Duplicate: passed with bank statement to TRA<br>
+				Triplicate: for Bank<br><br>
+
+				If a Nil –Statement is submitted (no payment is made),<br>
+				Submit this form on or before the due date directly to the appropriate Tax Office and not through the bank.<br>
+				In case of any difficulty in filling this form contact the Tax Office.<br>
+				<b>(*) Do not mix up regular payments (monthly with debit payments (other payments) in one form</b><br>
+				<font style="font-size: 8pt;">
+			</td>
+			<td colspan="1" style="vertical-align: middle !important;">
+				 <div style="width: 90%; height: 150px; padding: 10px; border: 1px solid black; margin: 0;">
+					<font style="font-size: 11pt; font-weight: bold; color: black;">
+						For official use only
+					</font>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="6" style="">
+				<font style="font-size: 60%; font-weight: bold; color: grey;">
+					  ITX300.01.E Employment Taxes Payment Credit Slip
+				</font>
+			</td>
+		</tr>
+	</tbody> 
+</table>
