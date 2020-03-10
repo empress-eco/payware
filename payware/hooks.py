@@ -130,8 +130,6 @@ fixtures = [
 		"Loan-status-in_standard_filter",
 		"Loan-search_fields",
 		"Loan-loan_amount-in_list_view",
-		"Loan Repayment Not From Salary-naming_series-options",
-		"Loan Repayment Not From Salary-naming_series-default",
 		"Payroll Entry-posting_date-in_list_view",
 		"Loan-loan_type-in_list_view",
 		"Loan-loan_type-in_standard_filter",
