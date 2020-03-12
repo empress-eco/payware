@@ -18,8 +18,10 @@ def update_hourly_rate_additional_salary(doc, method):
 	# get_employee_base_salary_in_hours(employee,payroll_date):
 	pass
 
-@frappe.whitelist()
 def create_disbursement_journal_entry(doc, method):
+	'''
+	This function is to be used to create disbursement journal. Primarily developed for creating disbursement journal for Loan
+	'''
 	#frappe.msgprint("Method fired: " + method)
 	precision = frappe.get_precision("Journal Entry Account", "debit_in_account_currency")
 

@@ -148,7 +148,6 @@ fixtures = [
 
 doc_events = {
 	"Loan": {
-		"on_submit": "payware.payware.utils.create_disbursement_journal_entry",
 		"validate": "payware.payware.utils.validate_loan"
 	},
 	"Salary Slip": {
