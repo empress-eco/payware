@@ -1,9 +1,5 @@
 [
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Salary Structure Assignment",
   "docstatus": 0,
@@ -20,10 +16,6 @@
   "value": "1"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Salary Structure Assignment",
   "docstatus": 0,
@@ -40,10 +32,6 @@
   "value": "0"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Payroll Entry",
   "docstatus": 0,
@@ -60,10 +48,6 @@
   "value": "1"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -80,10 +64,6 @@
   "value": "Repay Fixed Amount per Period\nRepay Over Number of Periods"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -100,10 +80,6 @@
   "value": "1"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -120,10 +96,6 @@
   "value": "1"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -140,10 +112,6 @@
   "value": "1"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -160,10 +128,6 @@
   "value": "0"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -180,10 +144,6 @@
   "value": "0"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -200,10 +160,6 @@
   "value": "1"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -220,10 +176,6 @@
   "value": "1"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Loan",
   "docstatus": 0,
@@ -240,10 +192,6 @@
   "value": "posting_date, applicant_name"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Payroll Entry",
   "docstatus": 0,
@@ -260,10 +208,6 @@
   "value": "1"
  },
  {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
   "default_value": null,
   "doc_type": "Salary Slip",
   "docstatus": 0,
