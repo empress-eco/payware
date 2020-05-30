@@ -9,6 +9,7 @@
   "loan",
   "column_break_3",
   "employee_name",
+  "employee",
   "section_break_4",
   "payment_date",
   "payment_amount",
@@ -100,10 +101,18 @@
    "options": "Loan Repayment Not From Salary",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fetch_from": "loan.applicant",
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Employee",
+   "options": "Employee"
   }
  ],
  "is_submittable": 1,
- "modified": "2020-01-13 00:26:45.682761",
+ "modified": "2020-05-06 21:48:58.196410",
  "modified_by": "Administrator",
  "module": "Payware",
  "name": "Loan Repayment Not From Salary",

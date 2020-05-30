@@ -47,6 +47,8 @@ def create_disbursement_journal_entry(doc, method):
 		},
 		{
 			"account": doc.loan_account,
+			# "party_type": "Employee",
+			# "party": doc.employee,
 			"debit_in_account_currency": payment_amount,
 			"reference_type": doc.doctype,
 			"reference_name": doc.name
