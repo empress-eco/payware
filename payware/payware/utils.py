@@ -47,8 +47,6 @@ def create_disbursement_journal_entry(doc, method):
 		},
 		{
 			"account": doc.loan_account,
-			# "party_type": "Employee",
-			# "party": doc.employee,
 			"debit_in_account_currency": payment_amount,
 			"reference_type": doc.doctype,
 			"reference_name": doc.name
@@ -97,7 +95,7 @@ def create_loan_repayment_jv(doc, method):
 	precision = frappe.get_precision("Journal Entry Account", "debit_in_account_currency")
 
 	journal_entry = frappe.new_doc('Journal Entry')
-	journal_entry.voucher_type = 'Bank Entry'
+	journal_entry.voucher_type = 'Cash Entry'
 	journal_entry.user_remark = _('{0} - {1} on {2}').format(doc.doctype, doc.name, doc.payment_date)
 	journal_entry.company = doc.company
 	journal_entry.posting_date = doc.payment_date
