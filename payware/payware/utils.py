@@ -550,3 +550,8 @@ def money_in_words(number, main_currency = None, fraction_currency=None):
 
 	return out + ' ' + _('only.')
 
+
+def set_employee_base_salary_in_hours(doc,method):
+	if doc.based_on_hourly_rate:
+		base_salary_in_hours = get_employee_base_salary_in_hours(doc.employee,doc.payroll_date)["base_salary_in_hours"]
+		doc.amount = doc.hourly_rate / 100 * doc.no_of_hours * base_salary_in_hours
