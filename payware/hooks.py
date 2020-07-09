@@ -164,7 +164,8 @@ doc_events = {
 	},
 	"Additional Salary": {
 		"on_submit": "payware.payware.utils.create_additional_salary_journal",
-		"on_cancel": "payware.payware.utils.create_additional_salary_journal"
+		"on_cancel": "payware.payware.utils.create_additional_salary_journal",
+		"before_validate": "payware.payware.utils.set_employee_base_salary_in_hours"
 	},
 	"Employee": {
 		"validate": "payware.payware.doctype.biometric_settings.biometric_settings.check_employee_bio_info"
