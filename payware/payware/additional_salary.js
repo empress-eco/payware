@@ -15,7 +15,7 @@ frappe.ui.form.on('Additional Salary', {
 		frm.set_value("hourly_rate", null);
 	},
 	no_of_hours: function(frm) {
-		if (frm.doc.employee) {
+		if (frm.doc.employee && frm.doc.payroll_date) {
 			frappe.call({
 				method: "payware.payware.utils.get_employee_base_salary_in_hours",
 				args: {
