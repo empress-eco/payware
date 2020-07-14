@@ -83,11 +83,11 @@ def set_loan_paid(doc, method):
 def create_loan_repayment_jv(doc, method):
 	loan = frappe.get_doc("Loan", doc.loan)
 	if method == "on_submit":
-		cr_account = loan.payment_account
-		dr_account = loan.loan_account
-	elif method == "on_cancel":
-		cr_account = loan.loan_account
 		dr_account = loan.payment_account
+		cr_account = loan.loan_account
+	elif method == "on_cancel":
+		dr_account = loan.loan_account
+		cr_account = loan.payment_account
 	else:
 		frappe.msgprint("Unknown method on create_loan_repayment_jv")
 		return
