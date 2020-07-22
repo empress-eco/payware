@@ -264,7 +264,7 @@
 						{% for(var i=0, l=data.length; i<l; i++) { %}
 						{% if (i+1 != l) { %}
 						<tr>
-							<TD style="text-align: left; ">{%= data[i][ __("Month")] %}-{%= l %}</TD>
+							<TD style="text-align: left; ">{%= data[i][ __("Month")] %}</TD>
 							<TD style="text-align: right;">{%= data[i][ __("Gross Pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TD>
 							<TD style="text-align: right;"></TD>
 							<TD style="text-align: right;"></TD>
@@ -279,7 +279,7 @@
 							<TH style="text-align: left; ">TOTAL</TH>
 							<TH style="text-align: right;">{%= data[i][ __("Gross Pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
 							<TH style="text-align: right;"></TH>
-							<TH style="text-align: right;"></TH>
+							<TH style="text-align: right;">{%= data[i][ __("Gross Pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
 							<TH style="text-align: right;">{%= data[i][ __("SDL")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
 						</tr>
 						{% } %}
