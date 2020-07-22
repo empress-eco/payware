@@ -267,7 +267,7 @@
 							<TD style="text-align: left; ">{%= data[i][ __("Month")] %}</TD>
 							<TD style="text-align: right;">{%= data[i][ __("Gross Pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TD>
 							<TD style="text-align: right;"></TD>
-							<TD style="text-align: right;"></TD>
+							<TD style="text-align: right;">{%= data[i][ __("Gross Pay")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TD>
 							<TD style="text-align: right;">{%= data[i][ __("SDL")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TD>
 						</tr>
 						{% } else { %}
