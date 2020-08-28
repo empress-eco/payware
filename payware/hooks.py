@@ -123,7 +123,9 @@ fixtures = [
 		"Additional Salary-hourly_rate",
 		"Loan-not_from_salary_loan_repayments",
 		"Employee-enable_biometric",
-		"Salary Component-sdl_emolument_category"
+		"Salary Component-sdl_emolument_category",
+		"Employee-column_break_54",
+		"Employee-tin_number"
 	)]]},
 	{"doctype":"Property Setter", "filters": [["name", "in", (
 		"Loan-posting_date-in_list_view",
