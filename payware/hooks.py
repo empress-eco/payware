@@ -125,7 +125,9 @@ fixtures = [
 		"Employee-enable_biometric",
 		"Salary Component-sdl_emolument_category",
 		"Employee-column_break_54",
-		"Employee-tin_number"
+		"Employee-tin_number",
+		"Payroll Entry-bank_account_for_transfer"
+
 	)]]},
 	{"doctype":"Property Setter", "filters": [["name", "in", (
 		"Loan-posting_date-in_list_view",
