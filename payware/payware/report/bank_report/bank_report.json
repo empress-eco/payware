@@ -7,7 +7,7 @@
  "doctype": "Report",
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2020-08-29 10:49:34.646213",
+ "modified": "2020-08-31 15:10:21.649682",
  "modified_by": "Administrator",
  "module": "Payware",
  "name": "Bank Report",
@@ -20,6 +20,12 @@
  "roles": [
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "HR Manager"
   }
  ]
 }
