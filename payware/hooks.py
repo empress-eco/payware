@@ -127,7 +127,11 @@ fixtures = [
 		"Employee-column_break_54",
 		"Employee-tin_number",
 		"Payroll Entry-bank_account_for_transfer",	
-		"Payroll Entry-section_break_35"
+		"Payroll Entry-section_break_35",
+		"Employee-section_break_47",
+		"Employee-tughe",
+		"Employee-column_break_49",
+		"Employee-heslb"
 	)]]},
 	{"doctype":"Property Setter", "filters": [["name", "in", (
 		"Loan-posting_date-in_list_view",
