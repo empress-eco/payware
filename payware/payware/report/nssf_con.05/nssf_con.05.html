@@ -43,7 +43,7 @@
     {% var total_nssf = 0  %}
     {% var page_total = 0  %}
     {% for(var i=0, l=data.length; i<=l-1; i++) { %} 
-        {% var total_nssf = total_nssf + data[i][ __("Contribution")]  %}
+        {% var total_nssf = total_nssf + data[i][("contribution")]  %}
     {% } %}
     
     <table class="table table-bordered">
@@ -80,7 +80,7 @@
                                     </tr>
                                     <tr>
                                         <td style="border: 0px;"><B>Address : </B></td>
-                                        <td style="border: 0px;">P. O. Box {%= data[0][("pobox")] %}Tanzania/td>
+                                        <td style="border: 0px;">P. O. Box {%= data[0][("pobox")] %}, {%= data[0][("city")] %}</td>
                                     </tr>
                                 </table>
                                 <table border=0 style="border-spacing: 0; border-collapse: collapse;">
@@ -92,7 +92,7 @@
                                         <td style="border: 0px;"><B>Employer&apos;s Registration Number : </B></td>
                                         <td style="border: 0px;">
                                             <div style="border: 1px solid black; padding: 2px; text-align: center; width: 200px; height: 18px;">
-                                                <span></span>
+                                                <span>{%= data[0][("employer_number")] %}</span>
                                             <div>
                                         </td>
                                     </tr>
@@ -101,13 +101,13 @@
                                         <td style="border: 0px;">
                                             <div>
                                                 <div style="float: left; width: 100px; border: 1px solid black; padding: 2px;text-align: center;  height: 18px;">
-                                                    
+                                                    {%= data[0][("contribution_month")] %}
                                                 </div>
                                                 <div style="float: left; padding: 2px; text-align: center;">
                                                     <b>&nbsp;Year : </b>
                                                 </div>
                                                 <div style="float: left; border: 1px solid black; padding: 2px; text-align: center;  height: 18px;">
-                                                    
+                                                    {%= data[0][("contribution_year")] %}
                                                 </div>
                                             </div>
                                         </td>
@@ -144,7 +144,7 @@
                                         <td style="border: 0px;"><b>Amount T Shs.</b></td>
                                         <td style="border: 0px;">
                                             <div style="border-bottom: double; padding: 2px; text-align: center; width: 135px; height: 18px;">
-                                                <span><b>&nbsp;</b></span>
+                                                <span><b>&nbsp;{%= total_nssf.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></span>
                                             <div>
                                         </td>
                                     </td>
@@ -168,7 +168,7 @@
                                         <td style="border: 0px;"><b>Date: </b></td>
                                         <td style="border: 0px;">
                                             <div style="border-bottom: double; padding: 2px; text-align: center; width: 135px; height: 18px;">
-                                                <span>&nbsp;{%= frappe.datetime.str_to_user(data[0][ __("Payment Date")]) %}</span>
+                                                <span>&nbsp;{%= frappe.datetime.str_to_user(data[0][("payment_date")]) %}</span>
                                         </td>
                                     </td>
                                 </table>
@@ -186,5 +186,223 @@
                 <th style="text-align: center">AMOUNT<br>TZS</th>
                 <th style="text-align: center">REMARKS</th>
             </tr>
-        </thead>		
+        </thead>
+        <tbody>
+            {% for(var i=0, l=data.length; i<=l-1; i++) { %} 
+                <tr>	
+					<td>{%= i+1 %}</td>
+					<td>{%= data[i][("employee_name")] %}</td>
+					<td>{%= data[i][("national_id")] %}</td>
+					<td style="text-align: right">{%= data[i][("gross_pay")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</td>
+					<td>{%= data[i][("membership_no")] %}</td>
+					<td style="text-align: right">{%= data[i][("contribution")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</td>
+					<td></td>
+                </tr>
+                {% var page_total = page_total + data[i][("contribution")]  %}	
+                {% if ((i+1)%30 == 0) { %} 
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th style="text-align: right" colspan=5><b>PAGE TOTAL</b></th>
+                                <th style="text-align: right"><b>{%= page_total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="page-break"></div>
+                    <table class="table table-bordered">
+                        <colgroup>
+                            <col style="width: 3%">
+                            <col style="width: 28%">
+                            <col style="width: 23%">
+                            <col style="width: 12%">
+                            <col style="width: 10%">
+                            <col style="width: 12%">
+                            <col style="width: 12%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <td colspan=7  style="border: 0px;">
+                                    <p class="manifest-header text-center">
+                                        <img src="/files/nssf conf.5 letter head.png" style="width: 100%;"/>
+                                    </p>
+                                    <table border=0 style="border-spacing: 0; border-collapse: collapse;">
+                                        <colgroup style="width: 780px;">
+                                            <col style="width: 510px;">
+                                            <col style="width: 270px;">
+                                        </colgroup>
+                                        <tr>
+                                            <td style="border: 0px;"> 
+                                                <table border=0 style="border-spacing: 0; border-collapse: collapse;">
+                                                    <colgroup style="width: 510px;">
+                                                        <col style="width: 180px;">
+                                                        <col style="width: 330px;">
+                                                    </colgroup>
+                                                    <tr>
+                                                        <td style="border: 0px;"><B>Employer Name : </B></td>
+                                                        <td style="border: 0px;">{%= data[0][("company")] %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border: 0px;"><B>Address : </B></td>
+                                                        <td style="border: 0px;">P. O. Box {%= data[0][("pobox")] %}, {%= data[0][("city")] %}</td>
+                                                    </tr>
+                                                </table>
+                                                <table border=0 style="border-spacing: 0; border-collapse: collapse;">
+                                                    <colgroup style="width: 510px;">
+                                                        <col style="width: 255px;">
+                                                        <col style="width: 255px;">
+                                                    </colgroup>
+                                                    <tr>
+                                                        <td style="border: 0px;"><B>Employer&apos;s Registration Number : </B></td>
+                                                        <td style="border: 0px;">
+                                                            <div style="border: 1px solid black; padding: 2px; text-align: center; width: 200px; height: 18px;">
+                                                                <span>{%= data[0][("employer_number")] %}</span>
+                                                            <div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border: 0px;"><B>Month of Contribution : </B></td>
+                                                        <td style="border: 0px;">
+                                                            <div>
+                                                                <div style="float: left; width: 100px; border: 1px solid black; padding: 2px;text-align: center;  height: 18px;">
+                                                                    {%= data[0][("contribution_month")] %}
+                                                                </div>
+                                                                <div style="float: left; padding: 2px; text-align: center;">
+                                                                    <b>&nbsp;Year : </b>
+                                                                </div>
+                                                                <div style="float: left; border: 1px solid black; padding: 2px; text-align: center;  height: 18px;">
+                                                                    {%= data[0][("contribution_year")] %}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td style="border: 0px;"><B>Regional/District Code No.: </B></td>
+                                                        <td style="border: 0px;">&nbsp;</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style="border: 0px;"> 
+                                                <table border=0 style="border-spacing: 0; border-collapse: collapse;">
+                                                    <colgroup style="width: 270px;">
+                                                        <col style="width: 135px;">
+                                                        <col style="width: 135px;">
+                                                    </colgroup>
+                                                    <tr>
+                                                        <td style="border: 0px;"><b>Page No:</b></td>
+                                                        <td style="border: 0px;">
+                                                            <div style="border: 1px solid black; padding: 2px; text-align: center; width: 135px; height: 18px;">
+                                                                <span>&nbsp;{%= page_no %}</span>
+                                                            <div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border: 0px;"><b>Cheque No.: </b></td>
+                                                        <td style="border: 0px;">
+                                                            <div style="border-bottom: double; padding: 2px; text-align: center; width: 135px; height: 18px;">
+                                                                <span>&nbsp;</span>
+                                                            <div>
+                                                        </td>
+                                                    </td>
+                                                    <tr>
+                                                        <td style="border: 0px;"><b>Amount T Shs.</b></td>
+                                                        <td style="border: 0px;">
+                                                            <div style="border-bottom: double; padding: 2px; text-align: center; width: 135px; height: 18px;">
+                                                                <span><b>&nbsp;{%= total_nssf.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></span>
+                                                            <div>
+                                                        </td>
+                                                    </td>
+                                                    <tr>
+                                                        <td style="border: 0px;"><b>Cash T Shs.</b></td>
+                                                        <td style="border: 0px;">
+                                                            <div style="border-bottom: double; padding: 2px; text-align: center; width: 135px; height: 18px;">
+                                                                <span>&nbsp;</span>
+                                                            <div>
+                                                        </td>
+                                                    </td>
+                                                    <tr>
+                                                        <td style="border: 0px;"><b>Receipt No.: </b></td>
+                                                        <td style="border: 0px;">
+                                                            <div style="border-bottom: double; padding: 2px; text-align: center; width: 135px; height: 18px;">
+                                                                <span>&nbsp;</span>
+                                                            <div>
+                                                        </td>
+                                                    </td>
+                                                    <tr>
+                                                        <td style="border: 0px;"><b>Date: </b></td>
+                                                        <td style="border: 0px;">
+                                                            <div style="border-bottom: double; padding: 2px; text-align: center; width: 135px; height: 18px;">
+                                                                <span>&nbsp;{%= frappe.datetime.str_to_user(data[0][("payment_date")]) %}</span>
+                                                        </td>
+                                                    </td>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>		
+                                </td>
+                            <tr>
+                            <tr>
+                                <th style="text-align: center">SR #</th>
+                                <th style="text-align: center">MEMBER'S NAME</th>
+                                <th style="text-align: center">NATIONAL ID NO. </th>
+                                <th style="text-align: center">WAGES</th>
+                                <th style="text-align: center">MEMBERSHIP NO.</th>
+                                <th style="text-align: center">AMOUNT<br>TZS</th>
+                                <th style="text-align: center">REMARKS</th>
+                            </tr>
+                        </thead>
+                {% } %} 
+            {% } %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th style="text-align: right" colspan=5><b>PAGE TOTAL</b></th>
+                <th style="text-align: right"><b>{%= page_total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></th>
+                <th>&nbsp;</th>
+            </tr>
+        </tfoot>
+		<tr>
+			<th style="text-align: right" colspan=5><b>GRAND TOTAL</b></th>
+			<th style="text-align: right"><b>{%= total_nssf.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}</b></th>
+			<th>&nbsp;</th>
+		</tr>
+		<tr>
+			<td colspan=3 align=center style="border: 0px;">		
+				<div style="border: 1px solid black; padding: 2px; text-align: center; width: 300px; height: 25px; margin-bottom: 2px; margin-top: 4px;">
+					<span><b>EMPLOYER'S SIGNATURE</b></span>
+				</div>
+				<div style="border: 1px solid black; padding: 2px; text-align: center; width: 300px; height: 75px; margin-bottom: 2px; margin-top: 2px;">
+					<span><b>&nbsp;</b></span>
+				</div>
+			</td>
+			<td colspan=2 align=center style="border: 0px;">
+			
+				<div style="border: 1px solid black; padding: 2px; text-align: center; width: 150px; height: 25px; margin-bottom: 2px; margin-top: 4px;">
+					<span><b>DATE</b></span>
+				</div>
+				<div style="border: 1px solid black; padding: 2px; text-align: center; width: 150px; height: 75px; margin-bottom: 2px;  margin-top: 2px;">
+					<span><b>&nbsp;</b></span>
+				</div>		
+			</td>
+			<td colspan=2 align=center style="border: 0px;"></td>
+		</tr>
+		<tr>
+			<td colspan=7 style="border: 0px;">
+				<div style="margin-top: 2px;">
+					<div style="float: left; width: 50px; border: 0px solid black; padding: 2px;text-align: center;  height: 18px;">
+						<b><i>NOTE:</i></b>
+					</div>
+					<div style="float: left; width: 5px; padding: 2px; text-align: center;">
+						&nbsp;
+					</div>
+					<div style="float: left; border: 0px solid black; padding: 2px; text-align: left;  height: 55px;">
+						<ul>
+							<li><i>To be users for NSSF registered members and full contribution of 20% should be shown</i></li>
+							<li><i>Each page total must be shown seperatly</i></li>
+							<li><i>Summary of all page totals must be shown on the last page</i></li>
+						</ul>
+					</div>
+				</div>
+			</td>
+		</tr>
     </table>
