@@ -130,6 +130,7 @@ fixtures = [
 		"Payroll Entry-section_break_35"
 	)]]},
 	{"doctype":"Property Setter", "filters": [["name", "in", (
+		"Repayment Schedule-payment_date-read_only",
 		"Loan-posting_date-in_list_view",
 		"Loan-status-in_standard_filter",
 		"Loan-search_fields",

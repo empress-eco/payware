@@ -214,6 +214,7 @@ def redo_repayment_schedule(loan_name):
 	paid_repayment_schedule_list = frappe.get_all("Repayment Schedule", fields=["name", "parent", "total_payment", "payment_date"], filters={"parent": loan.name, "paid": 1})
 	for repayment_schedule in paid_repayment_schedule_list:
 		total_repayments_made += repayment_schedule.total_payment
+	frappe.msgprint("total_repayments_made"+" "+str(total_repayments_made))
 
 	# Find total of NFS repayments made
 	#frappe.msgprint("Finding total repayemnts made")
@@ -232,10 +233,12 @@ def redo_repayment_schedule(loan_name):
 
 	next_payment_date = loan.repayment_start_date
 	# frappe.msgprint("The number of existing records in the repayment scheudule is " + str(len(repayment_schedule_list)))
+	# frappe.msgprint("Balance before forloop -" + str(balance_amount))
 	idx = 1
 	for repayment_schedule in repayment_schedule_list:
 		# if the dates don't match then there is a gap to fill in
 		# frappe.msgprint("payment date " + str(repayment_schedule.payment_date) + " " + str(next_payment_date))
+		# frappe.msgprint("Balance beforeif - " + str(balance_amount))
 		if repayment_schedule.payment_date != next_payment_date:
 			# Gap fillers
 			while (repayment_schedule.payment_date != next_payment_date and balance_amount > 0):
@@ -270,6 +273,7 @@ def redo_repayment_schedule(loan_name):
 			loan.save()
 			loan = frappe.get_doc("Loan", str(loan_name))
 
+		# frappe.msgprint("Balance afterif - " + str(balance_amount))
 		if repayment_schedule.change_amount:
 			total_payment = repayment_schedule.changed_principal_amount + repayment_schedule.changed_interest_amount
 			# frappe.msgprint("Setting values for changed amounts for " + str(repayment_schedule.payment_date) + " " + str(repayment_schedule.changed_principal_amount))
@@ -278,15 +282,18 @@ def redo_repayment_schedule(loan_name):
 			frappe.set_value("Repayment Schedule", repayment_schedule.name, "interest_amount", repayment_schedule.changed_interest_amount)
 			frappe.set_value("Repayment Schedule", repayment_schedule.name, "total_payment", total_payment)
 			frappe.set_value("Repayment Schedule", repayment_schedule.name, "balance_loan_amount", (balance_amount - total_payment))
-		if repayment_schedule.paid:
-			total_payment = repayment_schedule.total_payment
-		idx += 1
 		# Reload loan doc again after inserting and/or setting values
 		loan = frappe.get_doc("Loan", str(loan_name))
 
+		if repayment_schedule.paid:
+			total_payment = repayment_schedule.total_payment
+		else:
+			balance_amount -= total_payment
+		idx += 1
+
 		# Now the repayment_schedule.payment_date == next_payment_date meaning gaps have been filled
-		balance_amount -= total_payment
 		next_payment_date = add_months(next_payment_date, 1)
+		# frappe.msgprint("Balance afterloop - " + str(balance_amount))
 
 	# End fillers. Insert rows starting balance_amount till it is 0
 	while(balance_amount > 0):
