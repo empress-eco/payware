@@ -360,7 +360,11 @@ def create_additional_salary_journal(doc, method):
 	if (frappe.get_value("Salary Component", doc.salary_component, "create_cash_journal")):
 		salary_component = frappe.get_doc("Salary Component", doc.salary_component)
 		cash_account = frappe.db.get_single_value("Payware Settings", "default_account_for_additional_component_cash_journal")
-		component_account = frappe.db.get_value("Salary Component Account", {"parent": doc.salary_component, "company": doc.company}, "default_account")
+		component_account = None
+		try:
+			component_account = frappe.db.get_value("Salary Component Account", {"parent": doc.salary_component, "company": doc.company}, "default_account")
+		except Exception as e:
+			component_account = frappe.db.get_value("Salary Component Account", {"parent": doc.salary_component, "company": doc.company}, "account")
 		# frappe.msgprint("Expense account is: " + str(component_account))
 		if method == "on_submit":
 			dr_account = component_account
