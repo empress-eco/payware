@@ -363,9 +363,11 @@ def create_additional_salary_journal(doc, method):
 		component_account = None
 		try:
 			component_account = frappe.db.get_value("Salary Component Account", {"parent": doc.salary_component, "company": doc.company}, "default_account")
+			if not component_account:
+				frappe.throw("Ther is no account")
 		except Exception as e:
 			component_account = frappe.db.get_value("Salary Component Account", {"parent": doc.salary_component, "company": doc.company}, "account")
-		# frappe.msgprint("Expense account is: " + str(component_account))
+		#frappe.msgprint("Expense account is: " + str(component_account))
 		if method == "on_submit":
 			dr_account = component_account
 			cr_account = cash_account
