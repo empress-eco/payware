@@ -1,4 +1,5 @@
 {
+ "actions": [],
  "creation": "2018-12-30 13:21:50.169110",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -24,6 +25,7 @@
   "skills_development_levy",
   "employer_registration_numbers_section",
   "social_security_fund_registration_number",
+  "social_security_control_number",
   "column_break_12",
   "social_security_fund_registration_district",
   "wcf_workmen_compensation_fund_section",
@@ -108,7 +110,7 @@
   {
    "fieldname": "social_security_fund_registration_number",
    "fieldtype": "Data",
-   "label": "Social Security Fund Registration Number"
+   "label": "Social Security Employer Number"
   },
   {
    "fieldname": "column_break_12",
@@ -117,7 +119,7 @@
   {
    "fieldname": "social_security_fund_registration_district",
    "fieldtype": "Data",
-   "label": "Social Security Fund Registration District"
+   "label": "Social Security Registration District"
   },
   {
    "fieldname": "wcf_workmen_compensation_fund_section",
@@ -145,10 +147,17 @@
    "fieldtype": "Link",
    "label": "Bank Account for TRA",
    "options": "Bank Account"
+  },
+  {
+   "fieldname": "social_security_control_number",
+   "fieldtype": "Data",
+   "label": "Social Security Control Number"
   }
  ],
+ "index_web_pages_for_search": 1,
  "issingle": 1,
- "modified": "2020-03-06 12:43:18.795011",
+ "links": [],
+ "modified": "2021-07-09 16:58:05.578372",
  "modified_by": "Administrator",
  "module": "Payware",
  "name": "Payware Settings",
