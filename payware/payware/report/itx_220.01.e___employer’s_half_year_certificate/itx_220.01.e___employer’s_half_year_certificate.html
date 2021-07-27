@@ -10,7 +10,13 @@
 	.print-format th {
 		vertical-align: top !important;
 		padding: 2px !important;
+		font-size: 14px;
+	}
 
+	.print-format th {
+		color: black;
+		font-weight: bold;
+		background: lightgrey;
 	}
 
 	.small {
@@ -76,19 +82,23 @@
 	}
 </style>
 
-{% var start_date = filters.from_date %}
-{% var end_date = filters.to_date %}
-{% var tin = data[0][ __("tax_id")] %}
+{%
+var start_date = filters.from_date;
+var end_date = filters.to_date;
+var tin = data[0][ __("tin")];
+%}
 
-{% if ( end_date[5]+ end_date[6] == "06") { %}
-{% var tick1 = "X" %}
-{% } %}
+{%
+if ( end_date[5]+ end_date[6] == "06") {
+var tick1 = "X";
+}
 
-{% if ( end_date[5]+ end_date[6] == "12") { %}
-{% var tick2 = "X" %}
-{% } %}
+if ( end_date[5]+ end_date[6] == "12") {
+var tick2 = "X";
+}
+var sdl_rate = data[0][ __("sdl_rate")]
+%}
 
-{% var sdl_rate = data[0][ __("sdl_rate")] %}
 
 <p class="manifest-header text-center">
 	<img src="/files/tra-logo.gif" style="width: 35%;" />
@@ -97,7 +107,7 @@
 	SKILLS AND DEVELOPMENT LEVY<br>
 	EMPLOYER’S HALF YEAR CERTIFICATE
 </h3>
-
+<br>
 <table cellspacing=0 cellpadding=0 style="border: 0px solid black;" width=100%>
 	<colgroup>
 		<col style="width: 50%" />
@@ -168,7 +178,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<table style="border-spacing: 15px 30px;" border=0>
+				<table style="border-spacing: 15px 30px;" border="0">
 					<colgroup>
 						<col width="200">
 						<col width="200">
@@ -181,7 +191,7 @@
 						</tr>
 						<tr>
 							<td colspan=4>
-								<font style="font-weight: bold;">Name of Employer:
+								<font style="font-weight: bold;">Name of Employer:</font>
 							</td>
 						</tr>
 						<tr>
@@ -230,12 +240,14 @@
 							<td>
 								<font style="">Plot Number</font>
 							</td>
-							<td style="border: 1px solid black; text-align: center;">{%= data[0][ __("plot_no")] %}
+							<td style="border: 1px solid black; text-align: center;">
+								{%= data[0][ __("plot_no")] %}
 							</td>
 							<td>
 								<font style="">Block Number </font>
 							</td>
-							<td style="border: 1px solid black; text-align: center;">{%= data[0][ __("block_no)] %}
+							<td style="border: 1px solid black; text-align: center;">
+								{%= data[0][ __("block_no")] %}
 							</td>
 						</tr>
 						<tr style="line-height: 5px">
@@ -291,183 +303,190 @@
 						<th style="text-align: center;">Amount of<br>SDL paid<br>TZS</th>
 					</thead>
 					<tbody>
-						{% for(var i=0, l=data.length; i<l; i++) { %} {% if (i+1 !=l) { %} <tr>
-							<TD style="text-align: left; ">{%= data[i][ __("month")] %}</TD>
-							<TD style="text-align: right;">
-								{%= data[i][ __("gross")].toLocaleString(undefined, {minimumFractionDigits: 0,
-								maximumFractionDigits: 0}) %}
-							</TD>
-							<TD style="text-align: right;"></TD>
-							<TD style="text-align: right;">
-								{%= data[i][ __("gross")].toLocaleString(undefined, {minimumFractionDigits: 0,
-								maximumFractionDigits: 0}) %}
-							</TD>
-							<TD style="text-align: right;">
-								{%= data[i][ __("sdl")].toLocaleString(undefined, {minimumFractionDigits: 0,
-								maximumFractionDigits: 0}) %}</TD>
-		</tr>
-		{% } else { %}
-		{%
-		var tgp = data[i][ __("gross")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits:
-		0});
-		var tsdl = data[i][ __("sdl")].toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
-		%}
-		<tr>
-			<TH style="text-align: left; ">TOTAL</TH>
-			<TH style="text-align: right;">{%= data[i][ __("gross")].toLocaleString(undefined,
-				{minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
-			<TH style="text-align: right;"></TH>
-			<TH style="text-align: right;">{%= data[i][ __("gross")].toLocaleString(undefined,
-				{minimumFractionDigits: 0, maximumFractionDigits: 0}) %}</TH>
-			<TH style="text-align: right;">{%= data[i][ __("sdl")].toLocaleString(undefined, {minimumFractionDigits: 0,
-				maximumFractionDigits: 0}) %}</TH>
-		</tr>
-		{% } %}
-		{% } %}
-	</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="page-break"></div>
-<table cellspacing=0 cellpadding=0 style="border: 0px solid black;" width=100%>
-	<colgroup>
-		<col style="width: 50%" />
-		<col style="width: 50%" />
-	</colgroup>
-	<tbody>
-		<tr style="line-height: 50px">
-			<td colspan=2>&nbsp;</td>
-		</tr>
-		<tr>
-			<td colspan=2>
-				The amount of gross emoluments paid during the period from (please tick the appropriate box)
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<table style="border: 0px solid black !important;">
-					<colgroup>
-						<col width="35">
-						<col width="400">
-					</colgroup>
-					<tbody>
-						<tr>
-							<td style="border: 1px solid black; text-align: center;">{%= tick1 %}</td>
-							<td style="border: 0px solid black !important;">
-								<font style="font-weight: bold;">From 1 January to 30 June</font>
-							</td>
-						</tr>
-						<tr>
-							<td style="border: 0px solid black !important; line-height: 10px;">&nbsp;</td>
-							<td style="border: 0px solid black !important; line-height: 10px;">&nbsp;</td>
-						</tr>
-						<tr>
-							<td style="border: 1px solid black; text-align: center;">{%= tick2 %}</td>
-							<td style="border: 0px solid black !important;">
-								<font style="font-weight: bold;">From 1 January to 31 December</font>
-							</td>
-						</tr>
+					{% for(var i=0, l=data.length; i<l; i++) { 
+						if (i+1 !=l) {
+					%} 
+							<tr>
+								<TD style="text-align: left; ">{%= data[i][ __("month")] %}</TD>
+								<TD style="text-align: right;">
+									{%= data[i][ __("gross")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
+								</TD>
+								<TD style="text-align: right;"></TD>
+								<TD style="text-align: right;">
+									{%= data[i][ __("gross")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
+								</TD>
+								<TD style="text-align: right;">
+									{%= data[i][ __("sdl")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
+								</TD>
+							</tr>
+					{% 
+						} 
+						else { 
+							var tgp = data[i][ __("gross")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+							var tsdl = data[i][ __("sdl")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+					%}
+								<TR>
+									<TH style="text-align: left; ">TOTAL</TH>
+									<TH style="text-align: right;">
+										{%= data[i][ __("gross")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
+									</TH>
+									<TH style="text-align: right;"></TH>
+									<TH style="text-align: right;">
+											{%= data[i][ __("gross")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
+										</TH>
+									<TH style="text-align: right;">
+										{%= data[i][ __("sdl")].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) %}
+									</TH>
+								</TR>
+					{%	
+						}
+					}
+					%}
 					</tbody>
 				</table>
 			</td>
-			<td></td>
-		</tr>
-		<tr style="line-height: 5px">
-			<td colspan=2>&nbsp;</td>
-		</tr>
-		<tr>
-			<td colspan=2>
-				added up to TZS
-				<div class="box">
-					{%= tgp %}
-				</div>
-				and {%= sdl_rate %}% thereof is
-				<div class="box">
-					{%= tsdl %}
-				</div>
-			</td>
-		</tr>
-		<tr style="line-height: 25px">
-			<td colspan=2>&nbsp;</td>
-		</tr>
-		<tr>
-			<td colspan=2>
-				<strong>DECLARATION</strong>
-				<BR><Br>
-				I certify that the particulars entered on the form SDL already submitted monthly for the period
-				indicated above are correct.
-				<BR><Br>
-				Name of the Employer/Paying Officer
-				<hr style="border-top: dotted 1px;" />
-				Title: Mr.<div class="sqbox">&nbsp;</div> Mrs<div class="sqbox">&nbsp;</div>Ms<div class="sqbox">&nbsp;
-				</div>
-				<table style="width: 75%;">
-					<colgroup>
-						<col width="250">
-						<col width="20">
-						<col width="250">
-						<col width="20">
-						<col width="250">
-					</colgroup>
-					<tr>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-					</tr>
-					<tr>
-						<td style="border: 0px solid black; text-align: center;">First Name</td>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;">Middle Name</td>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;">SurName</td>
-					</tr>
-				</table>
-				<br>
-				Signature and rubber stamp of the Employer/Paying Officer
-				<br><br><br>
-				..........................................................................
-				<br><br>
-				<table style="width: 50%;">
-					<colgroup>
-						<col width="70">
-						<col width="30">
-						<col width="30">
-						<col width="30">
-						<col width="30">
-						<col width="30">
-						<col width="30">
-						<col width="30">
-						<col width="30">
-						<col width="30">
-						<col width="30">
-					</colgroup>
-					<tr>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;" colspan=2>Day</td>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;" colspan=2>Month</td>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;" colspan=4>Year</td>
-					</tr>
-					<tr>
-						<td style="border: 0px solid black; text-align: center;">Date</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 0px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-						<td style="border: 1px solid black; text-align: center;">&nbsp;</td>
-					</tr>
-				</table>
-			</td>
 		</tr>
 	</tbody>
 </table>
+<div class="page-break"></div>
+<table cellspacing=0 cellpadding=0 style="border: 0px solid black;" width=100%>
+    <colgroup>
+        <col style="width: 50%" />
+        <col style="width: 50%" />
+    </colgroup>
+    <tbody>
+        <tr style="line-height: 50px">
+            <td colspan=2>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                The amount of gross emoluments paid during the period from (please tick the appropriate box)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table style="border: 0px solid black !important;">
+                    <colgroup>
+                        <col width="35">
+                        <col width="400">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid black; text-align: center;">{%= tick1 %}</td>
+                            <td style="border: 0px solid black !important;">
+                                <font style="font-weight: bold;">From 1 January to 30 June</font>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 0px solid black !important; line-height: 10px;">&nbsp;</td>
+                            <td style="border: 0px solid black !important; line-height: 10px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; text-align: center;">{%= tick2 %}</td>
+                            <td style="border: 0px solid black !important;">
+                                <font style="font-weight: bold;">From 1 January to 31 December</font>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td></td>
+        </tr>
+        <tr style="line-height: 5px">
+            <td colspan=2>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                added up to TZS
+                <div class="box">
+                    {%= tgp %}
+                </div>
+                and {%= sdl_rate %}% thereof is
+                <div class="box">
+                    {%= tsdl %}
+                </div>
+            </td>
+        </tr>
+        <tr style="line-height: 25px">
+            <td colspan=2>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                <strong>DECLARATION</strong>
+                <BR><Br>
+                I certify that the particulars entered on the form SDL already submitted monthly for the period
+                indicated above are correct.
+                <BR><Br>
+                Name of the Employer/Paying Officer
+                <hr style="border-top: dotted 1px;" />
+                Title: Mr.<div class="sqbox">&nbsp;</div> Mrs<div class="sqbox">&nbsp;</div>Ms<div class="sqbox">&nbsp;
+                </div>
+                <table style="width: 75%;">
+                    <colgroup>
+                        <col width="250">
+                        <col width="20">
+                        <col width="250">
+                        <col width="20">
+                        <col width="250">
+                    </colgroup>
+                    <tr>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px solid black; text-align: center;">First Name</td>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;">Middle Name</td>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;">SurName</td>
+                    </tr>
+                </table>
+                <br>
+                Signature and rubber stamp of the Employer/Paying Officer
+                <br><br><br>
+                ..........................................................................
+                <br><br>
+                <table style="width: 50%;">
+                    <colgroup>
+                        <col width="70">
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                        <col width="30">
+                    </colgroup>
+                    <tr>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;" colspan=2>Day</td>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;" colspan=2>Month</td>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;" colspan=4>Year</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 0px solid black; text-align: center;">Date</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 0px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                        <td style="border: 1px solid black; text-align: center;">&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+	</tbody>
+</table>
+
