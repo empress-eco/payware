@@ -1,6 +1,6 @@
 ## Payware
 
-Payware Payroll System
+ERPNext Payroll enhancements specific for functionality required in Tanzania
 
 #### License
 
