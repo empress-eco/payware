@@ -1,10 +1,16 @@
-# ![Payware Logo](https://grow.empress.eco/uploads/default/original/2X/1/1f1e1044d3864269d2a613577edb9763890422ab.png Payware: A Tanzanian Payroll Solution
+<div align="center">
+
+<img src="https://grow.empress.eco/uploads/default/original/2X/1/1f1e1044d3864269d2a613577edb9763890422ab.png" alt="Logo" width="80" height="80">
 
 Transforming payroll management in Tanzania by customizing Empress payroll to meet local business requirements.
 
-- **Documentation**: [Explore the Docs](https://empress.eco/)
-- **Report a Bug**: [Submit an Issue](https://github.com/empress-eco/payware/issues)
-- **Request a Feature**: [Make a Request](https://github.com/empress-eco/payware/issues)
+
+**Documentation**: [Explore the Docs](https://empress.eco/) | **Report a Bug**: [Submit an Issue](https://github.com/empress-eco/payware/issues) | **Request a Feature**: [Make a Request](https://github.com/empress-eco/payware/issues)
+
+</div>
+
+
+
 
 ## About The Project
 
